@@ -5,6 +5,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.firebase.database.DataSnapshot;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,9 +26,11 @@ public class ProductService {
         List<ProductBean> productsArray = new ArrayList<>();
 
         for (DocumentSnapshot document : documents) {
+            System.out.println(document.getData());
             System.out.println(document.getId() + " => " + document.toObject(ProductBean.class));
             productsArray.add(document.toObject(ProductBean.class));
         }
+
         System.out.println(productsArray);
         return productsArray;
     }

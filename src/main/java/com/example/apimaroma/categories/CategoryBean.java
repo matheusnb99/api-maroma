@@ -5,6 +5,9 @@ public class CategoryBean {
     private String id;
     private String name;
 
+    public CategoryBean() {
+        this.id = null;
+    }
     public CategoryBean(String id) {
         this.id = id;
     }
