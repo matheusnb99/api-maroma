@@ -13,9 +13,10 @@ public class FirebaseInitialize {
     @PostConstruct
     public void initialize(){
         try {
+            System.out.println("-----------------------path");
 
             FileInputStream serviceAccount =
-                    new FileInputStream("../../../../../../serviceAccountKeyMaroma.json");
+                    new FileInputStream("./serviceAccountKeyMaroma.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
@@ -25,6 +26,7 @@ public class FirebaseInitialize {
             FirebaseApp.initializeApp(options);
 
         }catch (Exception e){
+            System.out.println("-----------------------err");
             e.printStackTrace();
         }
 
