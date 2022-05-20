@@ -15,7 +15,7 @@ public class FirebaseInitialize {
         try {
 
             FileInputStream serviceAccount =
-                    new FileInputStream("./serviceAccountKeyMaroma.json");
+                    new FileInputStream("../../../../../../serviceAccountKeyMaroma.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
