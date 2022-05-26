@@ -7,6 +7,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 public class ProductBean {
@@ -20,6 +21,17 @@ public class ProductBean {
     private double price = 0;
     private float grade = 0;
     private int basket = 0;
+
+
+    // > JAVA SE 9
+    private static final Set<String> DATABASE_KEYS = Set.of(
+            "color", "description", "grade", "id", "inBasket", "name", "price", "stock"
+    );
+
+    public static Set<String> getDatabaseKeys() {
+        return DATABASE_KEYS;
+    }
+
     // @Exclude
 
 

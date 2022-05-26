@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -18,20 +19,33 @@ public class ProductService {
     private Firestore dbFirestore = FirestoreClient.getFirestore();
     private CollectionReference productsTable = dbFirestore.collection("products");
 
-    public List<ProductBean> getAllProducts() throws ExecutionException, InterruptedException{
-        ApiFuture<QuerySnapshot> future = productsTable.get();
+    public List<ProductBean> getAllProducts(Optional<String> orderBy, Optional<Integer> limit) throws ExecutionException, InterruptedException{
+        Query query = productsTable;
+        Integer limitExists = limit.orElse(null);
+        String orderByExists = orderBy.orElse(null);
+
+        if(limitExists != null){
+            query = query.limit(limit.get());
+
+        }
+        if(orderByExists != null){
+            query = query.orderBy(orderBy.get());
+
+        }
+        ApiFuture<QuerySnapshot> future = query.get();
+
+
+        // System.out.println("\n"+orderBy.get() + " " + limit.get());
 
         // block on response
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         List<ProductBean> productsArray = new ArrayList<>();
 
         for (DocumentSnapshot document : documents) {
-            System.out.println(document.getData());
-            System.out.println(document.getId() + " => " + document.toObject(ProductBean.class));
             productsArray.add(document.toObject(ProductBean.class));
         }
 
-        System.out.println(productsArray);
+        //System.out.println(productsArray);
         return productsArray;
     }
 
