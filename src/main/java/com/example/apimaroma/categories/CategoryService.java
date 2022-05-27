@@ -24,10 +24,8 @@ public class CategoryService {
         List<CategoryBean> categoryBeans = new ArrayList<>();
 
         for (DocumentSnapshot document : documents) {
-            System.out.println(document.getId() + " => " + document.toObject(CategoryBean.class));
             categoryBeans.add(document.toObject(CategoryBean.class));
         }
-        System.out.println(categoryBeans);
         return categoryBeans;
     }
 

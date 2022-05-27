@@ -19,17 +19,26 @@ public class ProductService {
     private Firestore dbFirestore = FirestoreClient.getFirestore();
     private CollectionReference productsTable = dbFirestore.collection("products");
 
-    public List<ProductBean> getAllProducts(Optional<String> orderBy, Optional<Integer> limit) throws ExecutionException, InterruptedException{
+    public List<ProductBean> getAllProducts(Optional<String> orderBy, Optional<String> order, Optional<Integer> limit) throws ExecutionException, InterruptedException{
         Query query = productsTable;
         Integer limitExists = limit.orElse(null);
         String orderByExists = orderBy.orElse(null);
+        String orderExists = order.orElse(null);
+        Query.Direction direction = Query.Direction.ASCENDING;
 
         if(limitExists != null){
             query = query.limit(limit.get());
 
         }
+
+        if(orderExists != null){
+            direction = order.get() == "asc" ? Query.Direction.ASCENDING : Query.Direction.DESCENDING;
+
+        }
+
         if(orderByExists != null){
-            query = query.orderBy(orderBy.get());
+            query = query.orderBy(orderBy.get(), direction);
+
 
         }
         ApiFuture<QuerySnapshot> future = query.get();

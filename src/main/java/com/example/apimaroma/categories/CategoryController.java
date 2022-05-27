@@ -23,7 +23,7 @@ public class CategoryController {
     public CategoryBean getCategorie(@PathVariable("id") String id) throws ExecutionException, InterruptedException {
         return categoryService.getCategory(id);
     }
-    @GetMapping("/")
+    @GetMapping
     public List<CategoryBean> getCategories() throws ExecutionException, InterruptedException {
         return categoryService.getAllCategories();
     }
