@@ -32,7 +32,8 @@ public class ProductService {
         }
 
         if(orderExists != null){
-            direction = order.get() == "asc" ? Query.Direction.ASCENDING : Query.Direction.DESCENDING;
+            direction = order.get().equals("asc") ? Query.Direction.ASCENDING : Query.Direction.DESCENDING;
+            System.out.println(order.get().equals("asc"));
 
         }
 
@@ -44,7 +45,6 @@ public class ProductService {
         ApiFuture<QuerySnapshot> future = query.get();
 
 
-        // System.out.println("\n"+orderBy.get() + " " + limit.get());
 
         // block on response
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
@@ -52,6 +52,7 @@ public class ProductService {
 
         for (DocumentSnapshot document : documents) {
             productsArray.add(document.toObject(ProductBean.class));
+            System.out.println(document.toObject(ProductBean.class).getRatings());
         }
 
         //System.out.println(productsArray);
