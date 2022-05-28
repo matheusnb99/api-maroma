@@ -64,10 +64,8 @@ public class ProductService {
             ProductBean product = document.toObject(ProductBean.class);
             product.setRatings(this.getRatings(product.getId()));
             productsArray.add(product);
-            System.out.println(product.getRatings());
         }
 
-        //System.out.println(productsArray);
         return productsArray;
     }
 

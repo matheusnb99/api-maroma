@@ -2,36 +2,29 @@ package com.example.apimaroma.address;
 
 public class AddressBean {
     private String id = "";
-    private String street = "";
-    private String housenumber = "";
+    private String address = "";
     private String city = "";
-    private String context = "";
-    private String label = "";
-    private String postcode = "";
-    private String cityCode = "";
+    private String country = "";
+    private String postalCode = "";
+    private String recipient = "";
 
-    public AddressBean() {
-    }
+    public AddressBean() {}
 
-    public AddressBean(String street, String housenumber, String city, String context, String label, String postcode, String cityCode) {
-        this.street = street;
-        this.housenumber = housenumber;
+    public AddressBean(String address, String country, String city, String postalCode, String recipient) {
+        this.address = address;
+        this.country = country;
         this.city = city;
-        this.context = context;
-        this.label = label;
-        this.postcode = postcode;
-        this.cityCode = cityCode;
+        this.postalCode = postalCode;
+        this.recipient = recipient;
     }
 
-    public AddressBean(String id, String street, String housenumber, String city, String context, String label, String postcode, String cityCode) {
+    public AddressBean(String id, String address, String country, String city, String postalCode, String recipient) {
         this.id = id;
-        this.street = street;
-        this.housenumber = housenumber;
+        this.address = address;
+        this.country = country;
         this.city = city;
-        this.context = context;
-        this.label = label;
-        this.postcode = postcode;
-        this.cityCode = cityCode;
+        this.postalCode = postalCode;
+        this.recipient = recipient;
     }
 
     public String getId() {
@@ -42,20 +35,20 @@ public class AddressBean {
         this.id = id;
     }
 
-    public String getStreet() {
-        return street;
+    public String getAddress() {
+        return address;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getHousenumber() {
-        return housenumber;
+    public String getCountry() {
+        return country;
     }
 
-    public void setHousenumber(String housenumber) {
-        this.housenumber = housenumber;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getCity() {
@@ -66,36 +59,19 @@ public class AddressBean {
         this.city = city;
     }
 
-    public String getContext() {
-        return context;
+    public String getPostalCode() {
+        return postalCode;
     }
 
-    public void setContext(String context) {
-        this.context = context;
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
-    public String getLabel() {
-        return label;
+    public String getRecipient() {
+        return recipient;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
-
-    public String getCityCode() {
-        return cityCode;
-    }
-
-    public void setCityCode(String cityCode) {
-        this.cityCode = cityCode;
-    }
-
 }

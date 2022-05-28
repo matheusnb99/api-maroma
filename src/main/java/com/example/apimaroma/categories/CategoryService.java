@@ -1,14 +1,19 @@
 package com.example.apimaroma.categories;
 
-import com.example.apimaroma.products.ProductBean;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.*;
-import com.google.firebase.cloud.FirestoreClient;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.firebase.cloud.FirestoreClient;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class CategoryService {
@@ -18,7 +23,6 @@ public class CategoryService {
     public List<CategoryBean> getAllCategories() throws ExecutionException, InterruptedException{
         ApiFuture<QuerySnapshot> future =
                 categoriesTable.get();
-
         // block on response
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         List<CategoryBean> categoryBeans = new ArrayList<>();

@@ -1,15 +1,22 @@
 package com.example.apimaroma.orders;
 
-import com.example.apimaroma.user.UserBean;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.*;
-import com.google.firebase.cloud.FirestoreClient;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import com.example.apimaroma.user.UserBean;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.WriteResult;
+import com.google.firebase.cloud.FirestoreClient;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class OrderService {
@@ -18,19 +25,17 @@ public class OrderService {
     private CollectionReference ordersTable = dbFirestore.collection("orders");
 
 
-    public List<OrderBean> getAllOrders(UserBean user) throws ExecutionException, InterruptedException{
+    public List<OrderBean> getAllOrders(UserBean user) throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> future =
-                ordersTable.whereEqualTo("buyer", user.getId()).get();
+                ordersTable.whereEqualTo("buyer",  dbFirestore.collection("users").document(user.getId())).get();
 
         // block on response
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         List<OrderBean> ordersArray = new ArrayList<>();
 
         for (DocumentSnapshot document : documents) {
-            System.out.println(document.getId() + " => " + document.toObject(OrderBean.class));
             ordersArray.add(document.toObject(OrderBean.class));
         }
-        System.out.println(ordersArray);
         return ordersArray;
     }
 

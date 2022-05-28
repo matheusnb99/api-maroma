@@ -9,5 +9,4 @@ public class ApiMaromaApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiMaromaApplication.class, args);
     }
-
 }

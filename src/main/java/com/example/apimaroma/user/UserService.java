@@ -1,26 +1,30 @@
 package com.example.apimaroma.user;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
+
 import org.springframework.stereotype.Service;
-
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class UserService {
     private Firestore dbFirestore = FirestoreClient.getFirestore();
     private CollectionReference usersTable = dbFirestore.collection("users");
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-
-    public UserBean testGetUser() throws ExecutionException, InterruptedException{
+    public UserBean testGetUser() throws ExecutionException, InterruptedException {
+        
         // CollectionReference usersTable = dbFirestore.collection("users")
         DocumentReference docRef = usersTable.document("DYo4xs5SuwRNWAN2GMuiLkRGLzp2");
         ApiFuture<DocumentSnapshot> future = docRef.get();
@@ -56,7 +60,6 @@ public class UserService {
     }
 
     public String createUser(UserBean user) throws FirebaseAuthException {
-        //https://firebase.google.com/docs/auth/admin/manage-users#java
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
                 .setEmail(user.getEmail())
                 .setPassword(user.getPassword());
