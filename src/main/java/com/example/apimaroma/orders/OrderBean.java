@@ -13,9 +13,7 @@ import com.google.cloud.firestore.DocumentReference;
 
 public class OrderBean {
     private String id = "";
-    private DocumentReference buyer;
     private Date creationDate;
-    private DocumentReference paymentMode;
     private DocumentReference deliveryAddress;
     private Double total = 0.0;
     private List<DocumentReference> products;
@@ -26,24 +24,20 @@ public class OrderBean {
 
     public OrderBean() {}
 
-    public OrderBean(DocumentReference buyer, Double total, DocumentReference deliveryAddress,
-    Date creationDate, DocumentReference paymentMode, List<DocumentReference> products) {
-        this.buyer = buyer;
+    public OrderBean(Double total, DocumentReference deliveryAddress,
+    Date creationDate, List<DocumentReference> products) {
         this.deliveryAddress = deliveryAddress;
         this.total = total;
         this.creationDate = creationDate;
-        this.paymentMode = paymentMode;
         this.products = products;
     }
 
-    public OrderBean(String id, DocumentReference buyer, Double total, DocumentReference deliveryAddress,
-     Date creationDate, DocumentReference paymentMode, List<DocumentReference> products) {
+    public OrderBean(String id, Double total, DocumentReference deliveryAddress,
+     Date creationDate, List<DocumentReference> products) {
         this.id = id;
-        this.buyer = buyer;
         this.deliveryAddress = deliveryAddress;
         this.total = total;
         this.creationDate = creationDate;
-        this.paymentMode = paymentMode;
         this.products = products;
     }
 
@@ -55,28 +49,12 @@ public class OrderBean {
         this.id = id;
     }
 
-    public DocumentReference getBuyer() {
-        return buyer;
-    }
-
-    public void setBuyer(DocumentReference buyer) {
-        this.buyer = buyer;
-    }
-
     public Date getCreationDate() {
         return creationDate;
     }
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public DocumentReference getPaymentMode() {
-        return paymentMode;
-    }
-
-    public void setPaymentMode(DocumentReference paymentMode) {
-        this.paymentMode = paymentMode;
     }
 
     public Double getTotal() {
