@@ -12,9 +12,7 @@ public class UserBean {
     private String id;
     private String lastName;
     private String firstName;
-    private String phoneNumber;
     private Date birthDate; // timestamp firebase
-    private int age;
     private List<AddressBean> addressArray = new ArrayList<>();
     private String email;
     private String password;
@@ -31,23 +29,19 @@ public class UserBean {
         this.password = password;
     }
 
-    public UserBean(String id, String lastName, String firstName, String phoneNumber, Date birthDate, int age, List<AddressBean> addressArray) {
+    public UserBean(String id, String lastName, String firstName, Date birthDate, List<AddressBean> addressArray) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
-        this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
-        this.age = age;
         this.addressArray = addressArray;
     }
 
 
-    public UserBean(String lastName, String firstName, String phoneNumber, Date birthDate, int age, List<AddressBean> addressArray) {
+    public UserBean(String lastName, String firstName, Date birthDate, List<AddressBean> addressArray) {
         this.lastName = lastName;
         this.firstName = firstName;
-        this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
-        this.age = age;
         this.addressArray = addressArray;
     }
 
@@ -75,14 +69,6 @@ public class UserBean {
         this.firstName = firstName;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public Date getBirthDate() {
         return birthDate;
     }
@@ -91,23 +77,13 @@ public class UserBean {
         this.birthDate = birthDate;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
                 ", birthDate=" + birthDate +
-                ", age=" + age +
                 '}';
     }
 

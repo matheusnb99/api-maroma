@@ -22,6 +22,10 @@ public class UserController {
     public UserBean getUser(@PathVariable("id") String id) throws ExecutionException, InterruptedException {
         return userService.getUser(id);
     }
+    @PostMapping("/getUser")
+    public UserBean getUserWithPost(@RequestBody UserBean user) throws ExecutionException, InterruptedException {
+        return userService.getUser(user.getId());
+    }
 
     @GetMapping("/getUsersByName")
     public List<UserBean> getUserByName(@RequestHeader() String name) throws ExecutionException, InterruptedException {
@@ -29,7 +33,7 @@ public class UserController {
     }
 
 
-    @PostMapping(path="/createUser")
+    @PostMapping
     public String createUser(@RequestBody UserBean user) throws FirebaseAuthException {
         return userService.createUser(user);
     }
