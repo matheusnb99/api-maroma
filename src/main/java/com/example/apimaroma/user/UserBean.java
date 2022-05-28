@@ -1,21 +1,27 @@
 package com.example.apimaroma.user;
 
-import com.example.apimaroma.address.AddressBean;
-import com.google.cloud.firestore.annotation.Exclude;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+
+import com.example.apimaroma.address.AddressBean;
+import com.example.apimaroma.products.ProductBean;
+import com.example.apimaroma.products.ProductService;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.annotation.Exclude;
 
 public class UserBean {
     private String id;
     private String lastName;
     private String firstName;
     private Date birthDate; // timestamp firebase
+    private List<DocumentReference> basket = new ArrayList<>();
     private List<AddressBean> addressArray = new ArrayList<>();
     private String email;
     private String password;
+
 
 
     public UserBean() {
@@ -29,20 +35,22 @@ public class UserBean {
         this.password = password;
     }
 
-    public UserBean(String id, String lastName, String firstName, Date birthDate, List<AddressBean> addressArray) {
+    public UserBean(String id, String lastName, String firstName, Date birthDate, List<AddressBean> addressArray, List<DocumentReference> basket) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthDate = birthDate;
         this.addressArray = addressArray;
+        this.basket = basket;
     }
 
 
-    public UserBean(String lastName, String firstName, Date birthDate, List<AddressBean> addressArray) {
+    public UserBean(String lastName, String firstName, Date birthDate, List<AddressBean> addressArray, List<DocumentReference> basket) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthDate = birthDate;
         this.addressArray = addressArray;
+        this.basket = basket;
     }
 
     public String getId() {
@@ -55,6 +63,25 @@ public class UserBean {
 
     public String getLastName() {
         return lastName;
+    }
+
+
+    public List<ProductBean> getBasket() {
+       List<ProductBean> listProducts = new ArrayList<>();
+        for (DocumentReference product : basket) {
+            try {
+                ProductBean prod = (new ProductService()).getProduct(product.getId());
+                listProducts.add(prod);
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return listProducts;
+    }
+
+
+    public void  setBasket(List<DocumentReference> basket) {
+        this.basket = basket;
     }
 
     public void setLastName(String lastName) {
