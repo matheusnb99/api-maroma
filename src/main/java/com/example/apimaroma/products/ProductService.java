@@ -52,8 +52,10 @@ public class ProductService {
         List<ProductBean> productsArray = new ArrayList<>();
 
         for (DocumentSnapshot document : documents) {
-            productsArray.add(document.toObject(ProductBean.class));
-            System.out.println(document.toObject(ProductBean.class).getRatings());
+            ProductBean product = document.toObject(ProductBean.class);
+            product.setRatings(this.getRatings(product.getId()));
+            productsArray.add(product);
+            System.out.println(product.getRatings());
         }
 
         //System.out.println(productsArray);
@@ -74,9 +76,8 @@ public class ProductService {
 
     public List<RatingBean> getRatings(String id) throws ExecutionException, InterruptedException {
         CollectionReference ratingTable = productsTable.document(id).collection("ratings");
-/*
-        DocumentReference documentReference = ratingTable.document(id);
-        ApiFuture<DocumentSnapshot> future = documentReference.get();
+        Query query = ratingTable;
+        ApiFuture<QuerySnapshot> future = query.get();
 
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         List<RatingBean> ratingsArray = new ArrayList<>();
@@ -84,11 +85,9 @@ public class ProductService {
 
 
         for (DocumentSnapshot document : documents) {
-            productsArray.add(document.toObject(ProductBean.class));
-            System.out.println(document.toObject(ProductBean.class).getRatings());
+            ratingsArray.add(document.toObject(RatingBean.class));
+            System.out.println(document.toObject(RatingBean.class));
         }
-        return document.toObject(RatingBean.class);
-*/
-        return null;
+        return ratingsArray;
     }
 }

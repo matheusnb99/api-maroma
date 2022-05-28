@@ -24,6 +24,8 @@ public class RatingBean {
     public RatingBean(String userId) {
         this.userId = userId;
     }
+    public RatingBean() {
+    }
 
     private String userId = "";
     private Integer rating = 0;
