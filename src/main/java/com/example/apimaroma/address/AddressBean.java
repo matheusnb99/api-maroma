@@ -5,12 +5,12 @@ public class AddressBean {
     private String address = "";
     private String city = "";
     private String country = "";
-    private String postalCode = "";
+    private Integer postalCode = 0;
     private String recipient = "";
 
     public AddressBean() {}
 
-    public AddressBean(String address, String country, String city, String postalCode, String recipient) {
+    public AddressBean(String address, String country, String city, Integer postalCode, String recipient) {
         this.address = address;
         this.country = country;
         this.city = city;
@@ -18,7 +18,7 @@ public class AddressBean {
         this.recipient = recipient;
     }
 
-    public AddressBean(String id, String address, String country, String city, String postalCode, String recipient) {
+    public AddressBean(String id, String address, String country, String city, Integer postalCode, String recipient) {
         this.id = id;
         this.address = address;
         this.country = country;
@@ -59,11 +59,11 @@ public class AddressBean {
         this.city = city;
     }
 
-    public String getPostalCode() {
+    public Integer getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode) {
+    public void setPostalCode(Integer postalCode) {
         this.postalCode = postalCode;
     }
 
