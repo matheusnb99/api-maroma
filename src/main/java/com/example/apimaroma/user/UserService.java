@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.example.apimaroma.products.ProductBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
@@ -17,15 +18,6 @@ import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
 
 import org.springframework.stereotype.Service;
-
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class UserService {
@@ -78,15 +70,33 @@ public class UserService {
         return "Successfully created new user: " + userRecord.getUid();
     }
 
-    public UserBean addItemToBasket(String userId, String productId) throws ExecutionException, InterruptedException {
-        DocumentReference documentReference = usersTable.document(userId);
-        ApiFuture<DocumentSnapshot> future = documentReference.get();
-        Map<String, Object> update = new HashMap<>();
-        update.put("basket", productId);
-        documentReference.set(update, SetOptions.merge());
-        DocumentSnapshot document = future.get();
-        UserBean user = document.toObject(UserBean.class);
-        return  user;
+    public UserBean addItemToBasket(String userId, String productId, Integer quantity) throws ExecutionException, InterruptedException {
+        DocumentReference userRef = usersTable.document(userId);
+        ApiFuture<DocumentSnapshot> userSnap = userRef.get();
+        DocumentSnapshot userDoc = userSnap.get();
+        DocumentReference productRef = dbFirestore.collection("products").document(productId);
+        ApiFuture<DocumentSnapshot> productSnap = productRef.get();
+        DocumentSnapshot productDoc = productSnap.get();
+        UserBean user = userDoc.toObject(UserBean.class);
+        ProductBean product = productDoc.toObject(ProductBean.class);
 
+        List<DocumentReference> userBasket = user.getReferenceBasket();
+
+
+        if (product.getStock() > 0 && product.getStock() >= quantity) {
+            productRef.update("stock", product.getStock() - quantity);
+            for (Integer i = 1; i <= quantity; i++) {
+                userBasket.add(productRef);
+            }
+        } else if (product.getStock() > 0) {
+            productRef.update("stock", 0);
+            for (Integer i = 1; i <= product.getStock(); i++) {
+                userBasket.add(productRef);
+            }
+        }
+
+        userRef.update("basket", userBasket);
+        user.setBasket(userBasket);
+        return  user;
     }
 }

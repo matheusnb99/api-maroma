@@ -67,7 +67,7 @@ public class UserBean {
 
 
     public List<ProductBean> getBasket() {
-       List<ProductBean> listProducts = new ArrayList<>();
+        List<ProductBean> listProducts = new ArrayList<>();
         for (DocumentReference product : basket) {
             try {
                 ProductBean prod = (new ProductService()).getProduct(product.getId());
@@ -77,6 +77,10 @@ public class UserBean {
             }
         }
         return listProducts;
+    }
+    
+    public List<DocumentReference> getReferenceBasket() {
+        return basket;
     }
 
 
