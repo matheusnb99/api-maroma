@@ -1,15 +1,27 @@
 package com.example.apimaroma.products;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+
 import com.example.apimaroma.ratings.RatingBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
-import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.concurrent.ExecutionException;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
@@ -92,7 +104,7 @@ public class ProductService {
     public Timestamp setRatings(String id, RatingBean rating) throws ExecutionException, InterruptedException {
         System.out.println(rating.getUserId());
         DocumentReference ratingTable = productsTable.document(id).collection("ratings").document(rating.getUserId());
-        ApiFuture<WriteResult> future = ratingTable.update(rating.map());
+        ApiFuture<WriteResult> future = ratingTable.set(rating.map());
         System.out.println("Update time : " + future.get().getUpdateTime());
 
 
