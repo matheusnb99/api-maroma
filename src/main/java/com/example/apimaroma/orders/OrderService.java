@@ -32,7 +32,6 @@ public class OrderService {
         // block on response
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         List<OrderBean> ordersArray = new ArrayList<>();
-
         for (DocumentSnapshot document : documents) {
             ordersArray.add(document.toObject(OrderBean.class));
         }
