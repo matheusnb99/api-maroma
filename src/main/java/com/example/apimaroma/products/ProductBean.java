@@ -2,6 +2,8 @@ package com.example.apimaroma.products;
 
 import com.example.apimaroma.categories.CategoryBean;
 import com.example.apimaroma.categories.CategoryService;
+import com.example.apimaroma.ratings.RatingBean;
+import com.example.apimaroma.ratings.RatingService;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 
@@ -17,6 +19,16 @@ public class ProductBean {
 
 
     private List<DocumentReference> categories;
+
+    public List<RatingBean> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<RatingBean> ratings) {
+        this.ratings = ratings;
+    }
+
+    private List<RatingBean> ratings;
     private int stock = 0;
     private double price = 0;
     private float grade = 0;
@@ -48,7 +60,7 @@ public class ProductBean {
         this.basket = basket;
     }
 
-    public ProductBean(String id, String name, String description, List<DocumentReference> categories, int stock, double price, float grade, int basket) {
+    public ProductBean(String id, String name, String description, List<DocumentReference> categories, int stock, double price, float grade, int basket, List<RatingBean> ratings) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -57,6 +69,7 @@ public class ProductBean {
         this.price = price;
         this.grade = grade;
         this.basket = basket;
+        this.ratings = ratings;
     }
 
     public String getId() {
@@ -89,14 +102,25 @@ public class ProductBean {
             try {
                 CategoryBean cat = (new CategoryService()).getCategory(category.getId());
                 listCategories.add(cat);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
         return listCategories;
     }
+
+//    public List<RatingBean> getRatings() {
+//        List<RatingBean> listRating = new ArrayList<>();
+//        for (DocumentReference rating : ratings) {
+//            try {
+//                RatingBean rat = (new RatingService()).getRating(rating.getId());
+//                listRating.add(rat);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return listRating;
+//    }
 
 
 

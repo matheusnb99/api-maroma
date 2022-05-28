@@ -1,6 +1,7 @@
 package com.example.apimaroma.products;
 
 
+import com.example.apimaroma.ratings.RatingBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
@@ -71,4 +72,23 @@ public class ProductService {
         return  writeResult.get().getUpdateTime();
     }
 
+    public List<RatingBean> getRatings(String id) throws ExecutionException, InterruptedException {
+        CollectionReference ratingTable = productsTable.document(id).collection("ratings");
+/*
+        DocumentReference documentReference = ratingTable.document(id);
+        ApiFuture<DocumentSnapshot> future = documentReference.get();
+
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        List<RatingBean> ratingsArray = new ArrayList<>();
+
+
+
+        for (DocumentSnapshot document : documents) {
+            productsArray.add(document.toObject(ProductBean.class));
+            System.out.println(document.toObject(ProductBean.class).getRatings());
+        }
+        return document.toObject(RatingBean.class);
+*/
+        return null;
+    }
 }

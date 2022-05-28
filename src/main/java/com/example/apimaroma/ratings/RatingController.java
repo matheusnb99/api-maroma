@@ -1,2 +1,4 @@
-package com.example.apimaroma.ratings;public class RatingController {
+package com.example.apimaroma.ratings;
+
+public class RatingController {
 }
