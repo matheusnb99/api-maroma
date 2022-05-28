@@ -18,6 +18,15 @@ import com.google.firebase.cloud.FirestoreClient;
 
 import org.springframework.stereotype.Service;
 
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 @Service
 public class UserService {
     private Firestore dbFirestore = FirestoreClient.getFirestore();
@@ -69,4 +78,15 @@ public class UserService {
         return "Successfully created new user: " + userRecord.getUid();
     }
 
+    public UserBean addItemToBasket(String userId, String productId) throws ExecutionException, InterruptedException {
+        DocumentReference documentReference = usersTable.document(userId);
+        ApiFuture<DocumentSnapshot> future = documentReference.get();
+        Map<String, Object> update = new HashMap<>();
+        update.put("basket", productId);
+        documentReference.set(update, SetOptions.merge());
+        DocumentSnapshot document = future.get();
+        UserBean user = document.toObject(UserBean.class);
+        return  user;
+
+    }
 }

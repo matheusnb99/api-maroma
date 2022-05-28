@@ -3,6 +3,7 @@ package com.example.apimaroma.user;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.example.apimaroma.products.ProductBean;
 import com.google.firebase.auth.FirebaseAuthException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,10 @@ public class UserController {
     public UserBean getUserWithPost(@RequestBody UserBean user) throws ExecutionException, InterruptedException {
         return userService.getUser(user.getId());
     }
-
+    @PostMapping("/basket")
+    public UserBean getUserWithPost(@RequestBody BasketBean basketItem) throws ExecutionException, InterruptedException {
+        return userService.addItemToBasket(basketItem.getUserId(), basketItem.getProductId());
+    }
     
     @PostMapping
     public String createUser(@RequestBody UserBean user) throws FirebaseAuthException {
