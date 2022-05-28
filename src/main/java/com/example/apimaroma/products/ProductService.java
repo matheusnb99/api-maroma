@@ -6,12 +6,9 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
-import com.google.firebase.database.DataSnapshot;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -89,5 +86,29 @@ public class ProductService {
             System.out.println(document.toObject(RatingBean.class));
         }
         return ratingsArray;
+    }
+
+
+    public Timestamp setRatings(String id, RatingBean rating) throws ExecutionException, InterruptedException {
+        System.out.println(rating.getUserId());
+        DocumentReference ratingTable = productsTable.document(id).collection("ratings").document(rating.getUserId());
+        ApiFuture<WriteResult> future = ratingTable.update(rating.map());
+        System.out.println("Update time : " + future.get().getUpdateTime());
+
+
+        Map<String, Object> updates = new HashMap<>();
+        Float s = 0f;
+        Integer i = 0;
+        for (RatingBean ratingBean : getRatings(id)) {
+            s+= ratingBean.getRating();
+            i += 1;
+        }
+
+        updates.put("grade", s/i);
+
+        ApiFuture<WriteResult> future2 = productsTable.document(id).update(updates);
+
+        return future.get().getUpdateTime();
+
     }
 }

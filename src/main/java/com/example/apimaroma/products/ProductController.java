@@ -1,8 +1,7 @@
 package com.example.apimaroma.products;
 
 import com.example.apimaroma.ratings.RatingBean;
-import com.google.api.gax.rpc.InvalidArgumentException;
-        import com.google.cloud.Timestamp;
+import com.google.cloud.Timestamp;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +29,10 @@ public class ProductController {
     @GetMapping("/{id}/ratings")
     public List<RatingBean> getRatings(@PathVariable("id") String id) throws ExecutionException, InterruptedException {
         return productService.getRatings(id);
+    }
+    @PostMapping("/{id}/ratings")
+    public Timestamp setRating(@PathVariable("id") String id, @RequestBody RatingBean rating) throws ExecutionException, InterruptedException {
+        return productService.setRatings(id, rating);
     }
 
     @GetMapping
