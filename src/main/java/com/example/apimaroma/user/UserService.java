@@ -1,6 +1,7 @@
 package com.example.apimaroma.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -9,6 +10,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -70,7 +72,10 @@ public class UserService {
         return "Successfully created new user: " + userRecord.getUid();
     }
 
-    public UserBean addItemToBasket(String userId, String productId, Integer quantity) throws ExecutionException, InterruptedException {
+    public UserBean addItemToBasket(String userId, String productId, Integer quantity)
+            throws ExecutionException, InterruptedException {
+
+            System.out.println(userId + " " + productId + " " + quantity);
         DocumentReference userRef = usersTable.document(userId);
         ApiFuture<DocumentSnapshot> userSnap = userRef.get();
         DocumentSnapshot userDoc = userSnap.get();
@@ -80,16 +85,25 @@ public class UserService {
         UserBean user = userDoc.toObject(UserBean.class);
         ProductBean product = productDoc.toObject(ProductBean.class);
 
-        List<DocumentReference> userBasket = user.getReferenceBasket();
+        ArrayList<DocumentReference> userBasket = new ArrayList<>();
 
+        for (ProductBean pb : user.getBasket()) {
+            userBasket.add(dbFirestore.collection("products").document(pb.getId()));
+        }
 
         if (product.getStock() > 0 && product.getStock() >= quantity) {
-            productRef.update("stock", product.getStock() - quantity);
+            HashMap<String, Object> updateMap = new HashMap<>();
+            updateMap.put("stock", product.getStock() - quantity);
+            updateMap.put("inBasket", FieldValue.increment(quantity));
+            productRef.update(updateMap);
             for (Integer i = 1; i <= quantity; i++) {
                 userBasket.add(productRef);
             }
         } else if (product.getStock() > 0) {
-            productRef.update("stock", 0);
+            HashMap<String, Object> updateMap = new HashMap<>();
+            updateMap.put("stock", 0);
+            updateMap.put("inBasket", FieldValue.increment(product.getStock()));
+            productRef.update(updateMap);
             for (Integer i = 1; i <= product.getStock(); i++) {
                 userBasket.add(productRef);
             }
@@ -97,6 +111,27 @@ public class UserService {
 
         userRef.update("basket", userBasket);
         user.setBasket(userBasket);
-        return  user;
+        return user;
     }
+
+    
+    /*public UserBean removeItemFromBasket(String userId, String productId)
+            throws ExecutionException, InterruptedException {
+        DocumentReference userRef = usersTable.document(userId);
+        ApiFuture<DocumentSnapshot> userSnap = userRef.get();
+        DocumentSnapshot userDoc = userSnap.get();
+        UserBean user = userDoc.toObject(UserBean.class);
+        
+        
+    
+        DocumentReference productRef = dbFirestore.collection("products").document(productId);
+
+
+
+
+    
+    
+    
+    
+    }*/
 }

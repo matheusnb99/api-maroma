@@ -1,6 +1,7 @@
 package com.example.apimaroma.user;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import com.google.firebase.auth.FirebaseAuthException;
@@ -35,8 +36,8 @@ public class UserController {
         return userService.getUser(user.getId());
     }
     @PostMapping("/basket")
-    public UserBean getUserWithPost(@RequestBody String userId, String productId, Integer quantity) throws ExecutionException, InterruptedException {
-        return userService.addItemToBasket(userId, productId, quantity);
+    public UserBean getUserWithPost(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
+        return userService.addItemToBasket((String) bodyMap.get("userId"), (String) bodyMap.get("productId"), (Integer) bodyMap.get("quantity"));
     }
     
     @PostMapping

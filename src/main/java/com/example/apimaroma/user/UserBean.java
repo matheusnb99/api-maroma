@@ -78,10 +78,6 @@ public class UserBean {
         }
         return listProducts;
     }
-    
-    public List<DocumentReference> getReferenceBasket() {
-        return basket;
-    }
 
 
     public void  setBasket(List<DocumentReference> basket) {
