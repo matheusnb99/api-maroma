@@ -115,23 +115,22 @@ public class UserService {
     }
 
     
-    /*public UserBean removeItemFromBasket(String userId, String productId)
+    public UserBean removeItemFromBasket(String userId, String productId, Integer quantity)
             throws ExecutionException, InterruptedException {
         DocumentReference userRef = usersTable.document(userId);
+        DocumentReference productRef = dbFirestore.collection("products").document(productId);
+
+        userRef.update("basket", FieldValue.arrayRemove(productRef));
+
+        HashMap<String, Object> updateMap = new HashMap<>();
+        updateMap.put("stock", FieldValue.increment(quantity));
+        updateMap.put("inBasket", FieldValue.increment(0 - quantity));
+        productRef.update(updateMap);
+
         ApiFuture<DocumentSnapshot> userSnap = userRef.get();
         DocumentSnapshot userDoc = userSnap.get();
         UserBean user = userDoc.toObject(UserBean.class);
-        
-        
     
-        DocumentReference productRef = dbFirestore.collection("products").document(productId);
-
-
-
-
-    
-    
-    
-    
-    }*/
+        return user;
+    }
 }
