@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.example.apimaroma.ratings.RatingBean;
-import com.example.apimaroma.user.UserBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
@@ -28,15 +27,39 @@ public class ProductService {
     private Firestore dbFirestore = FirestoreClient.getFirestore();
     private CollectionReference productsTable = dbFirestore.collection("products");
 
-    public List<ProductBean> getAllProducts(Optional<String> orderBy, Optional<String> order, Optional<Integer> limit) throws ExecutionException, InterruptedException{
+    public List<ProductBean> getAllProducts(Optional<String> orderBy,
+                                            Optional<String> order,
+                                            Optional<Integer> limit,
+                                            Optional<Float> minPrice,
+                                            Optional<Float> maxPrice,
+                                            Optional<Float> minNote,
+                                            Optional<Float> maxNote,
+                                            Optional<String> color,
+                                            Optional<String> search) throws ExecutionException, InterruptedException{
         Query query = productsTable;
         Integer limitExists = limit.orElse(null);
         String orderByExists = orderBy.orElse(null);
         String orderExists = order.orElse(null);
+        String colorExists = color.orElse(null);
+        Float minPriceExists = minPrice.orElse(null);
+        Float maxPriceExists = maxPrice.orElse(null);
+        Float minNoteeExists = minNote.orElse(null);
+        Float maxNoteExists = maxNote.orElse(null);
+        String searchExists = search.orElse(null);
         Query.Direction direction = Query.Direction.ASCENDING;
 
         if(limitExists != null){
             query = query.limit(limit.get());
+
+        }
+        if(searchExists != null){
+            String title = search.get().toLowerCase(Locale.ROOT)
+                    .replace("é", "e")
+                    .replace("ç", "c")
+                    .replace("à", "a")
+                    .trim();
+
+            query = productsTable.orderBy("name").startAt(title).endAt(title+"\uf8ff").limit(25);
 
         }
 
@@ -49,6 +72,21 @@ public class ProductService {
         if(orderByExists != null){
             query = query.orderBy(orderBy.get(), direction);
 
+        }
+        if(minPriceExists != null){
+            query = query.whereGreaterThanOrEqualTo("price", minPrice.get());
+
+        }
+        if(maxPriceExists != null){
+            query = query.whereLessThanOrEqualTo("price", maxPrice.get());
+
+        }
+        if(minNoteeExists != null){
+            query = query.whereGreaterThanOrEqualTo("grade", minNote.get());
+
+        }
+        if(maxNoteExists != null){
+            query = query.whereLessThanOrEqualTo("grade", maxNote.get());
 
         }
         ApiFuture<QuerySnapshot> future = query.get();
