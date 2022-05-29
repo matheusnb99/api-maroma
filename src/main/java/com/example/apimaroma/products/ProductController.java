@@ -9,6 +9,7 @@ import com.google.cloud.Timestamp;
         import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequestMapping(path="api/v1/product")
@@ -36,13 +37,17 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductBean> getAllProducts(@RequestParam("orderBy") Optional<String> orderBy,@RequestParam("order") Optional<String> order, @RequestParam("limit") Optional<Integer> limit) throws ExecutionException, InterruptedException {
+    public List<ProductBean> getAllProducts(@RequestParam("search") Optional<String> search, @RequestParam("orderBy") Optional<String> orderBy,@RequestParam("order") Optional<String> order, @RequestParam("limit") Optional<Integer> limit) throws ExecutionException, InterruptedException, TimeoutException {
         if(orderBy.isPresent() && !ProductBean.getDatabaseKeys().contains(orderBy.get())){
             throw new IllegalArgumentException(orderBy.get() + " is not a valid field");
         }
         // > JAVA SE 9
         if(order.isPresent() && !Set.of("asc", "desc").contains(order.get())){
             throw new IllegalArgumentException(orderBy.get() + " is not a valid field");
+        }
+
+        if(search.isPresent()){
+            return productService.searchProductByTitle(search.get());
         }
         return productService.getAllProducts(orderBy, order, limit);
     }

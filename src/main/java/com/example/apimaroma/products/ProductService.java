@@ -1,14 +1,13 @@
 package com.example.apimaroma.products;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import com.example.apimaroma.ratings.RatingBean;
+import com.example.apimaroma.user.UserBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
@@ -120,5 +119,22 @@ public class ProductService {
 
         return future.get().getUpdateTime();
 
+    }
+
+    public List<ProductBean> searchProductByTitle(String query) throws ExecutionException, InterruptedException, TimeoutException {
+        String title = query.toLowerCase(Locale.ROOT)
+                .replace("é", "e")
+                .replace("ç", "c")
+                .replace("à", "a")
+                .trim();
+
+        Query query1 = productsTable.orderBy("name").startAt(title).endAt(title+"\uf8ff").limit(25);
+        ApiFuture<QuerySnapshot> querySnapshot1 = query1.get();
+        List<ProductBean> productsArray = new ArrayList<>();
+        for (DocumentSnapshot document : querySnapshot1.get(30, TimeUnit.SECONDS).getDocuments()) {
+            productsArray.add(document.toObject(ProductBean.class));
+        }
+
+        return productsArray;
     }
 }
