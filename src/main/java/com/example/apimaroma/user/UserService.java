@@ -1,6 +1,7 @@
 package com.example.apimaroma.user;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -14,10 +15,8 @@ import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.gson.Gson;
 
 import org.springframework.stereotype.Service;
 
@@ -62,20 +61,26 @@ public class UserService {
         return usersArray;
     }
 
-    public String createUser(UserBean user) throws FirebaseAuthException {
-        UserRecord.CreateRequest request = new UserRecord.CreateRequest()
-                .setEmail(user.getEmail())
-                .setPassword(user.getPassword());
-        System.out.println(user.getEmail());
-        UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
+    public UserBean createUser(HashMap<String, Object> userMap) throws ExecutionException, InterruptedException {
+        System.out.println(userMap.values());
+        DocumentReference userRef = usersTable.document((String) userMap.get("id"));
+                
+        userMap.put("birthDate", new Date((Long) userMap.get("birthDateLong")));
+        userMap.put("basket", new ArrayList<>());
+        userMap.put("defaultAddress", null);
 
-        return "Successfully created new user: " + userRecord.getUid();
+        userMap.remove("birthDateLong");
+
+        userRef.set(userMap);
+
+        Gson gson = new Gson(); 
+        String json = gson.toJson(userMap); 
+       
+        return gson.fromJson(json, UserBean.class);
     }
 
     public UserBean addItemToBasket(String userId, String productId, Integer quantity)
             throws ExecutionException, InterruptedException {
-
-            System.out.println(userId + " " + productId + " " + quantity);
         DocumentReference userRef = usersTable.document(userId);
         ApiFuture<DocumentSnapshot> userSnap = userRef.get();
         DocumentSnapshot userDoc = userSnap.get();
