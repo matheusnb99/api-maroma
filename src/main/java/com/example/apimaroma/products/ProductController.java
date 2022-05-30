@@ -1,15 +1,23 @@
 package com.example.apimaroma.products;
 
-import com.example.apimaroma.ratings.RatingBean;
-import com.google.cloud.Timestamp;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.web.bind.annotation.*;
-
-        import java.util.List;
-        import java.util.Optional;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+
+import com.example.apimaroma.ratings.RatingBean;
+import com.google.cloud.Timestamp;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path="api/v1/product")
@@ -46,21 +54,29 @@ public class ProductController {
             @RequestParam("nMin") Optional<Float> minNote,
             @RequestParam("nMax") Optional<Float> maxNote,
             @RequestParam("color") Optional<String> color,
-            @RequestParam("limit") Optional<Integer> limit) throws ExecutionException, InterruptedException, TimeoutException {
+            @RequestParam("limit") Optional<Integer> limit)
+            throws ExecutionException, InterruptedException, TimeoutException {
 
-        if(orderBy.isPresent() && !ProductBean.getDatabaseKeys().contains(orderBy.get())){
+        if (orderBy.isPresent() && !ProductBean.getDatabaseKeys().contains(orderBy.get())) {
             throw new IllegalArgumentException(orderBy.get() + " is not a valid field");
         }
         // > JAVA SE 9
-        if(order.isPresent() && !Set.of("asc", "desc").contains(order.get())){
+        if (order.isPresent() && !Set.of("asc", "desc").contains(order.get())) {
             throw new IllegalArgumentException(orderBy.get() + " is not a valid field");
         }
 
-        if((minPrice.isPresent() && minPrice.get()<0) || (minNote.isPresent() && minNote.get()<0)){
+        if ((minPrice.isPresent() && minPrice.get() < 0) || (minNote.isPresent() && minNote.get() < 0)) {
             throw new IllegalArgumentException("Price / Note must be above 0");
         }
 
-        return productService.getAllProducts(orderBy, order, limit, minPrice, maxPrice, minNote, maxNote, color, search);
+        return productService.getAllProducts(orderBy, order, limit, minPrice, maxPrice, minNote, maxNote, color,
+                search);
+    }
+
+    @GetMapping("/category/{id}")
+    public List<ProductBean> getCategoryProducts(
+            @PathVariable("id") String id) throws ExecutionException, InterruptedException, TimeoutException {
+        return productService.searchProductsByCategory(id);
     }
 
     @DeleteMapping

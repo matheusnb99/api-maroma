@@ -1,7 +1,12 @@
 package com.example.apimaroma.products;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -59,39 +64,30 @@ public class ProductService {
                     .replace("à", "a")
                     .trim();
 
-            query = productsTable.orderBy("name").startAt(title).endAt(title+"\uf8ff").limit(25);
-
+            query = productsTable.orderBy("name").startAt(title).endAt(title + "\uf8ff");
         }
 
         if(orderExists != null){
             direction = order.get().equals("asc") ? Query.Direction.ASCENDING : Query.Direction.DESCENDING;
             System.out.println(order.get().equals("asc"));
-
         }
 
         if(orderByExists != null){
             query = query.orderBy(orderBy.get(), direction);
-
         }
         if(minPriceExists != null){
             query = query.whereGreaterThanOrEqualTo("price", minPrice.get());
-
         }
         if(maxPriceExists != null){
             query = query.whereLessThanOrEqualTo("price", maxPrice.get());
-
         }
         if(minNoteeExists != null){
             query = query.whereGreaterThanOrEqualTo("grade", minNote.get());
-
         }
         if(maxNoteExists != null){
             query = query.whereLessThanOrEqualTo("grade", maxNote.get());
-
         }
         ApiFuture<QuerySnapshot> future = query.get();
-
-
 
         // block on response
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
@@ -137,11 +133,8 @@ public class ProductService {
 
 
     public Timestamp setRatings(String id, RatingBean rating) throws ExecutionException, InterruptedException {
-        System.out.println(rating.getUserId());
         DocumentReference ratingTable = productsTable.document(id).collection("ratings").document(rating.getUserId());
         ApiFuture<WriteResult> future = ratingTable.set(rating.map());
-        System.out.println("Update time : " + future.get().getUpdateTime());
-
 
         Map<String, Object> updates = new HashMap<>();
         Float s = 0f;
@@ -159,14 +152,27 @@ public class ProductService {
 
     }
 
-    public List<ProductBean> searchProductByTitle(String query) throws ExecutionException, InterruptedException, TimeoutException {
+    public List<ProductBean> searchProductsByTitle(String query)
+            throws ExecutionException, InterruptedException, TimeoutException {
         String title = query.toLowerCase(Locale.ROOT)
                 .replace("é", "e")
                 .replace("ç", "c")
                 .replace("à", "a")
                 .trim();
 
-        Query query1 = productsTable.orderBy("name").startAt(title).endAt(title+"\uf8ff").limit(25);
+        Query query1 = productsTable.orderBy("name").startAt(title).endAt(title + "\uf8ff").limit(25);
+        ApiFuture<QuerySnapshot> querySnapshot1 = query1.get();
+        List<ProductBean> productsArray = new ArrayList<>();
+        for (DocumentSnapshot document : querySnapshot1.get(30, TimeUnit.SECONDS).getDocuments()) {
+            productsArray.add(document.toObject(ProductBean.class));
+        }
+
+        return productsArray;
+    }
+    
+     public List<ProductBean> searchProductsByCategory(String id) throws ExecutionException, InterruptedException, TimeoutException {
+         Query query1 = productsTable.whereArrayContains("categories",
+                 dbFirestore.collection("categories").document(id));
         ApiFuture<QuerySnapshot> querySnapshot1 = query1.get();
         List<ProductBean> productsArray = new ArrayList<>();
         for (DocumentSnapshot document : querySnapshot1.get(30, TimeUnit.SECONDS).getDocuments()) {

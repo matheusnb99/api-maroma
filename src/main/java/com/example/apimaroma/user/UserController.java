@@ -1,10 +1,9 @@
 package com.example.apimaroma.user;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
-import com.google.firebase.auth.FirebaseAuthException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,9 +48,9 @@ public class UserController {
         return userService.removeItemFromBasket((String) bodyMap.get("userId"), (String) bodyMap.get("productId"), (Integer) bodyMap.get("quantity"));
     }
     
-    @PostMapping
-    public String createUser(@RequestBody UserBean user) throws FirebaseAuthException {
-        return userService.createUser(user);
+    @PostMapping("/createUser")
+    public UserBean createUser(@RequestBody HashMap<String, Object> bodyMap) throws ExecutionException, InterruptedException {
+        return userService.createUser(bodyMap);
     }
 
     @GetMapping("/getUsersByName")

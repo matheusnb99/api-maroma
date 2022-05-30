@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import com.example.apimaroma.address.AddressBean;
+import com.example.apimaroma.address.AddressService;
 import com.example.apimaroma.products.ProductBean;
 import com.example.apimaroma.products.ProductService;
 import com.google.cloud.firestore.DocumentReference;
@@ -17,6 +18,7 @@ public class UserBean {
     private String lastName;
     private String firstName;
     private Date birthDate; // timestamp firebase
+    private DocumentReference defaultAddress;
     private List<DocumentReference> basket = new ArrayList<>();
     private List<AddressBean> addressArray = new ArrayList<>();
     private String email;
@@ -35,26 +37,42 @@ public class UserBean {
         this.password = password;
     }
 
-    public UserBean(String id, String lastName, String firstName, Date birthDate, List<AddressBean> addressArray, List<DocumentReference> basket) {
+    public UserBean(String id, String lastName, DocumentReference defaultAddress, String firstName, Date birthDate, List<AddressBean> addressArray, List<DocumentReference> basket) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthDate = birthDate;
+        this.defaultAddress = defaultAddress;
         this.addressArray = addressArray;
         this.basket = basket;
     }
 
 
-    public UserBean(String lastName, String firstName, Date birthDate, List<AddressBean> addressArray, List<DocumentReference> basket) {
+    public UserBean(String lastName, DocumentReference defaultAddress, String firstName, Date birthDate, List<AddressBean> addressArray, List<DocumentReference> basket) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthDate = birthDate;
+        this.defaultAddress = defaultAddress;
         this.addressArray = addressArray;
         this.basket = basket;
     }
 
     public String getId() {
         return id;
+    }
+
+    public AddressBean getDefaultAddress() {
+        if (defaultAddress != null) {
+            try {
+                AddressBean addr = (new AddressService()).getAddress(defaultAddress);
+                return addr;
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     public void setId(String id) {
