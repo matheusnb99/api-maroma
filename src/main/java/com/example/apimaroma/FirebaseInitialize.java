@@ -1,16 +1,18 @@
 package com.example.apimaroma;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.annotation.PostConstruct;
+
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.io.*;
 
 @Service
 public class FirebaseInitialize {
@@ -38,7 +40,5 @@ public class FirebaseInitialize {
         finally {
             IOUtils.closeQuietly(serviceAccount);
         }
-
-
     };
 }
