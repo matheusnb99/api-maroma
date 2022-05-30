@@ -9,6 +9,7 @@ import java.util.concurrent.TimeoutException;
 import com.example.apimaroma.ratings.RatingBean;
 import com.google.cloud.Timestamp;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path="api/v1/product")
+@Api(value = "Products Resource", description = "Endpoint of Products route")
 public class ProductController {
 
     private final ProductService productService;
@@ -29,7 +31,24 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
+/*
+*    @GetMapping("/{id}")
+    public ResponseEntity getProduct(@PathVariable("id") String id)  {
+        ProductBean productBean;
+        try {
+            productBean = productService.getProduct(id);
 
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(productBean, HttpStatus.OK);
+    }
+*
+* */
 
     @GetMapping("/{id}")
     public ProductBean getProduct(@PathVariable("id") String id) throws ExecutionException, InterruptedException {

@@ -3,6 +3,7 @@ package com.example.apimaroma.colors;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path="api/v1/color")
+@Api(value = "Color Resource", description = "Endpoint of Color route")
 public class ColorController {
     private final ColorService colorService;
 

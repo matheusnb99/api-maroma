@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import com.example.apimaroma.user.UserBean;
 import com.google.cloud.Timestamp;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path="api/v1/orders")
+@Api(value = "Orders Resource", description = "Endpoint of Orders route")
 public class OrderController {
     private final OrderService orderService;
 
