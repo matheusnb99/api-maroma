@@ -8,7 +8,8 @@ public class AddressBean {
     private Integer postalCode = 0;
     private String recipient = "";
 
-    public AddressBean() {}
+    public AddressBean() {
+    }
 
     public AddressBean(String address, String country, String city, Integer postalCode, String recipient) {
         this.address = address;

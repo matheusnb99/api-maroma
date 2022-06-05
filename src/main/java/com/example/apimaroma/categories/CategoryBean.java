@@ -8,9 +8,11 @@ public class CategoryBean {
     public CategoryBean() {
         this.id = null;
     }
+
     public CategoryBean(String id) {
         this.id = id;
     }
+
     public CategoryBean(String id, String name) {
         this.id = id;
         this.name = name;
@@ -31,6 +33,5 @@ public class CategoryBean {
     public void setName(String name) {
         this.name = name;
     }
-
 
 }

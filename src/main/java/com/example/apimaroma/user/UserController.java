@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path="api/v1/user")
+@RequestMapping(path = "api/v1/user")
 public class UserController {
 
     private final UserService userService;
@@ -41,15 +41,17 @@ public class UserController {
         return userService.addItemToBasket((String) bodyMap.get("userId"), (String) bodyMap.get("productId"),
                 (Integer) bodyMap.get("quantity"));
     }
-    
-    
+
     @PostMapping("/removeBasket")
-    public UserBean removeFromBasket(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
-        return userService.removeItemFromBasket((String) bodyMap.get("userId"), (String) bodyMap.get("productId"), (Integer) bodyMap.get("quantity"));
+    public UserBean removeFromBasket(@RequestBody Map<String, Object> bodyMap)
+            throws ExecutionException, InterruptedException {
+        return userService.removeItemFromBasket((String) bodyMap.get("userId"), (String) bodyMap.get("productId"),
+                (Integer) bodyMap.get("quantity"));
     }
-    
+
     @PostMapping("/createUser")
-    public UserBean createUser(@RequestBody HashMap<String, Object> bodyMap) throws ExecutionException, InterruptedException {
+    public UserBean createUser(@RequestBody HashMap<String, Object> bodyMap)
+            throws ExecutionException, InterruptedException {
         return userService.createUser(bodyMap);
     }
 

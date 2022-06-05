@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.springframework.stereotype.Service;
+
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
@@ -12,8 +14,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
-
-import org.springframework.stereotype.Service;
 
 @Service
 public class ColorService {
@@ -25,7 +25,7 @@ public class ColorService {
         DocumentReference documentReference = colorsTable.document(id);
         ApiFuture<DocumentSnapshot> future = documentReference.get();
         DocumentSnapshot document = future.get();
-        return  document.toObject(ColorBean.class);
+        return document.toObject(ColorBean.class);
     }
 
     public List<ColorBean> getAllColors() throws ExecutionException, InterruptedException {
@@ -40,7 +40,7 @@ public class ColorService {
             colorsArray.add(document.toObject(ColorBean.class));
         }
 
-        //System.out.println(colorsArray);
+        // System.out.println(colorsArray);
         return colorsArray;
     }
 }

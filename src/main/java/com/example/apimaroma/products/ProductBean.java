@@ -29,13 +29,9 @@ public class ProductBean {
         this.ratings = ratings;
     }
 
-
-
-
     // > JAVA SE 9
     private static final Set<String> DATABASE_KEYS = Set.of(
-            "color", "description", "grade", "id", "inBasket", "name", "price", "stock"
-    );
+            "color", "description", "grade", "id", "inBasket", "name", "price", "stock");
 
     public static Set<String> getDatabaseKeys() {
         return DATABASE_KEYS;
@@ -43,11 +39,11 @@ public class ProductBean {
 
     // @Exclude
 
-
     public ProductBean() {
     }
 
-    public ProductBean(String name, String description, List<DocumentReference> categories, Integer stock, Double price, Float grade, Integer basket) {
+    public ProductBean(String name, String description, List<DocumentReference> categories, Integer stock, Double price,
+            Float grade, Integer basket) {
         this.name = name;
         this.description = description;
         this.categories = categories;
@@ -57,7 +53,8 @@ public class ProductBean {
         this.basket = basket;
     }
 
-    public ProductBean(String id, String name, String description, List<DocumentReference> categories, Integer stock, Double price, Float grade, Integer basket, List<RatingBean> ratings) {
+    public ProductBean(String id, String name, String description, List<DocumentReference> categories, Integer stock,
+            Double price, Float grade, Integer basket, List<RatingBean> ratings) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -106,20 +103,18 @@ public class ProductBean {
         return listCategories;
     }
 
-//    public List<RatingBean> getRatings() {
-//        List<RatingBean> listRating = new ArrayList<>();
-//        for (DocumentReference rating : ratings) {
-//            try {
-//                RatingBean rat = (new RatingService()).getRating(rating.getId());
-//                listRating.add(rat);
-//            } catch (Exception e) {
-//                e.prIntegerStackTrace();
-//            }
-//        }
-//        return listRating;
-//    }
-
-
+    // public List<RatingBean> getRatings() {
+    // List<RatingBean> listRating = new ArrayList<>();
+    // for (DocumentReference rating : ratings) {
+    // try {
+    // RatingBean rat = (new RatingService()).getRating(rating.getId());
+    // listRating.add(rat);
+    // } catch (Exception e) {
+    // e.prIntegerStackTrace();
+    // }
+    // }
+    // return listRating;
+    // }
 
     public void setCategories(List<DocumentReference> categories) {
         this.categories = categories;

@@ -24,10 +24,9 @@ public class UserBean {
     private String email;
     private String password;
 
-
-
     public UserBean() {
     }
+
     public UserBean(String id) {
         this.id = id;
     }
@@ -37,7 +36,8 @@ public class UserBean {
         this.password = password;
     }
 
-    public UserBean(String id, String lastName, DocumentReference defaultAddress, String firstName, Date birthDate, List<AddressBean> addressArray, List<DocumentReference> basket) {
+    public UserBean(String id, String lastName, DocumentReference defaultAddress, String firstName, Date birthDate,
+            List<AddressBean> addressArray, List<DocumentReference> basket) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -47,8 +47,8 @@ public class UserBean {
         this.basket = basket;
     }
 
-
-    public UserBean(String lastName, DocumentReference defaultAddress, String firstName, Date birthDate, List<AddressBean> addressArray, List<DocumentReference> basket) {
+    public UserBean(String lastName, DocumentReference defaultAddress, String firstName, Date birthDate,
+            List<AddressBean> addressArray, List<DocumentReference> basket) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthDate = birthDate;
@@ -83,7 +83,6 @@ public class UserBean {
         return lastName;
     }
 
-
     public List<ProductBean> getBasket() {
         List<ProductBean> listProducts = new ArrayList<>();
         for (DocumentReference product : basket) {
@@ -97,8 +96,7 @@ public class UserBean {
         return listProducts;
     }
 
-
-    public void  setBasket(List<DocumentReference> basket) {
+    public void setBasket(List<DocumentReference> basket) {
         this.basket = basket;
     }
 
@@ -134,8 +132,10 @@ public class UserBean {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserBean)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof UserBean))
+            return false;
         UserBean user = (UserBean) o;
         return id.equals(user.id);
     }
