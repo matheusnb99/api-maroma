@@ -12,6 +12,7 @@ import com.google.cloud.firestore.DocumentReference;
 
 public class ProductBean {
     private String id = "";
+    private List<String> images;
     private String name = "";
     private String description = "";
     private List<RatingBean> ratings;
@@ -43,6 +44,7 @@ public class ProductBean {
     }
 
     public ProductBean(String name, String description, List<DocumentReference> categories, Integer stock, Double price,
+            List<String> images,
             Float grade, Integer basket) {
         this.name = name;
         this.description = description;
@@ -51,9 +53,11 @@ public class ProductBean {
         this.price = price;
         this.grade = grade;
         this.basket = basket;
+        this.images = images;
     }
 
     public ProductBean(String id, String name, String description, List<DocumentReference> categories, Integer stock,
+            List<String> images,
             Double price, Float grade, Integer basket, List<RatingBean> ratings) {
         this.id = id;
         this.name = name;
@@ -64,6 +68,15 @@ public class ProductBean {
         this.grade = grade;
         this.basket = basket;
         this.ratings = ratings;
+        this.images = images;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
     public String getId() {
