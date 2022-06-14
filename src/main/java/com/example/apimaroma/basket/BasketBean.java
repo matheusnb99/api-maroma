@@ -1,4 +1,4 @@
-package com.example.apimaroma.user;
+package com.example.apimaroma.basket;
 
 public class BasketBean {
     public String getUserId() {

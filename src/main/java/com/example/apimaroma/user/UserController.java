@@ -35,19 +35,6 @@ public class UserController {
         return userService.getUser(user.getId());
     }
 
-    @PostMapping("/basket")
-    public UserBean addToBasket(@RequestBody Map<String, Object> bodyMap)
-            throws ExecutionException, InterruptedException {
-        return userService.addItemToBasket((String) bodyMap.get("userId"), (String) bodyMap.get("productId"),
-                (Integer) bodyMap.get("quantity"));
-    }
-    
-    
-    @PostMapping("/removeBasket")
-    public UserBean removeFromBasket(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
-        return userService.removeItemFromBasket((String) bodyMap.get("userId"), (String) bodyMap.get("productId"), (Integer) bodyMap.get("quantity"));
-    }
-    
     @PostMapping("/createUser")
     public UserBean createUser(@RequestBody HashMap<String, Object> bodyMap) throws ExecutionException, InterruptedException {
         return userService.createUser(bodyMap);
