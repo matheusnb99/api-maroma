@@ -5,14 +5,14 @@ import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 
 @Service
 public class FirebaseInitialize {
@@ -20,13 +20,12 @@ public class FirebaseInitialize {
     private String firebaseConfigPath;
 
     @PostConstruct
-    public void initialize(){
+    public void initialize() {
 
         InputStream serviceAccount = null;
 
         try {
             serviceAccount = new ClassPathResource(firebaseConfigPath).getInputStream();
-
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
@@ -36,8 +35,7 @@ public class FirebaseInitialize {
             FirebaseApp.initializeApp(options);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             IOUtils.closeQuietly(serviceAccount);
         }
     };

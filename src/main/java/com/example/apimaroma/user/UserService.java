@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.springframework.stereotype.Service;
+
 import com.example.apimaroma.products.ProductBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
@@ -17,8 +19,6 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.Gson;
-
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
@@ -32,7 +32,8 @@ public class UserService {
         UserBean user = document.toObject(UserBean.class);
         return user;
     }
-    public List<UserBean> searchUserByName(String name) throws ExecutionException, InterruptedException{
+
+    public List<UserBean> searchUserByName(String name) throws ExecutionException, InterruptedException {
         // Query query = usersTable.orderBy("name").startAt(name).endAt(name+'\uf8ff');
         Query query1 = usersTable.whereEqualTo("firstName", name);
         Query query2 = usersTable.whereEqualTo("lastName", name);
@@ -45,7 +46,7 @@ public class UserService {
         }
         for (DocumentSnapshot document : querySnapshot2.get().getDocuments()) {
             UserBean tempUser = document.toObject(UserBean.class);
-            if(!usersArray.contains(tempUser)){
+            if (!usersArray.contains(tempUser)) {
                 usersArray.add(tempUser);
             }
         }
@@ -55,7 +56,7 @@ public class UserService {
     public UserBean createUser(HashMap<String, Object> userMap) throws ExecutionException, InterruptedException {
         System.out.println(userMap.values());
         DocumentReference userRef = usersTable.document((String) userMap.get("id"));
-                
+
         userMap.put("birthDate", new Date((Long) userMap.get("birthDateLong")));
         userMap.put("basket", new ArrayList<>());
         userMap.put("defaultAddress", null);
@@ -64,10 +65,71 @@ public class UserService {
 
         userRef.set(userMap);
 
-        Gson gson = new Gson(); 
-        String json = gson.toJson(userMap); 
-       
+        Gson gson = new Gson();
+        String json = gson.toJson(userMap);
+
         return gson.fromJson(json, UserBean.class);
     }
 
+<<<<<<< HEAD
+=======
+    public UserBean addItemToBasket(String userId, String productId, Integer quantity)
+            throws ExecutionException, InterruptedException {
+        DocumentReference userRef = usersTable.document(userId);
+        ApiFuture<DocumentSnapshot> userSnap = userRef.get();
+        DocumentSnapshot userDoc = userSnap.get();
+        DocumentReference productRef = dbFirestore.collection("products").document(productId);
+        ApiFuture<DocumentSnapshot> productSnap = productRef.get();
+        DocumentSnapshot productDoc = productSnap.get();
+        UserBean user = userDoc.toObject(UserBean.class);
+        ProductBean product = productDoc.toObject(ProductBean.class);
+
+        ArrayList<DocumentReference> userBasket = new ArrayList<>();
+
+        for (ProductBean pb : user.getBasket()) {
+            userBasket.add(dbFirestore.collection("products").document(pb.getId()));
+        }
+
+        if (product.getStock() > 0 && product.getStock() >= quantity) {
+            HashMap<String, Object> updateMap = new HashMap<>();
+            updateMap.put("stock", product.getStock() - quantity);
+            updateMap.put("inBasket", FieldValue.increment(quantity));
+            productRef.update(updateMap);
+            for (Integer i = 1; i <= quantity; i++) {
+                userBasket.add(productRef);
+            }
+        } else if (product.getStock() > 0) {
+            HashMap<String, Object> updateMap = new HashMap<>();
+            updateMap.put("stock", 0);
+            updateMap.put("inBasket", FieldValue.increment(product.getStock()));
+            productRef.update(updateMap);
+            for (Integer i = 1; i <= product.getStock(); i++) {
+                userBasket.add(productRef);
+            }
+        }
+
+        userRef.update("basket", userBasket);
+        user.setBasket(userBasket);
+        return user;
+    }
+
+    public UserBean removeItemFromBasket(String userId, String productId, Integer quantity)
+            throws ExecutionException, InterruptedException {
+        DocumentReference userRef = usersTable.document(userId);
+        DocumentReference productRef = dbFirestore.collection("products").document(productId);
+
+        userRef.update("basket", FieldValue.arrayRemove(productRef));
+
+        HashMap<String, Object> updateMap = new HashMap<>();
+        updateMap.put("stock", FieldValue.increment(quantity));
+        updateMap.put("inBasket", FieldValue.increment(0 - quantity));
+        productRef.update(updateMap);
+
+        ApiFuture<DocumentSnapshot> userSnap = userRef.get();
+        DocumentSnapshot userDoc = userSnap.get();
+        UserBean user = userDoc.toObject(UserBean.class);
+
+        return user;
+    }
+>>>>>>> 77b22d2646c283d2656508fff09b6338592a8cf3
 }

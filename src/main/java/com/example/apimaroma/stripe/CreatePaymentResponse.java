@@ -1,4 +1,5 @@
 package com.example.apimaroma.stripe;
+
 class CreatePaymentResponse {
     private String clientSecret;
 

@@ -5,11 +5,13 @@ import com.example.apimaroma.user.UserBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
+@Service
 public class BasketService {
     private Firestore dbFirestore = FirestoreClient.getFirestore();
     private CollectionReference usersTable = dbFirestore.collection("users");

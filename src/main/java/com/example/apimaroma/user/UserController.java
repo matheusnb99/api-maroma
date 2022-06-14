@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path="api/v1/user")
+@RequestMapping(path = "api/v1/user")
 public class UserController {
 
     private final UserService userService;
@@ -36,7 +36,8 @@ public class UserController {
     }
 
     @PostMapping("/createUser")
-    public UserBean createUser(@RequestBody HashMap<String, Object> bodyMap) throws ExecutionException, InterruptedException {
+    public UserBean createUser(@RequestBody HashMap<String, Object> bodyMap)
+            throws ExecutionException, InterruptedException {
         return userService.createUser(bodyMap);
     }
 

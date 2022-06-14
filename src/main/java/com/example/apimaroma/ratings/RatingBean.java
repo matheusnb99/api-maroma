@@ -24,21 +24,22 @@ public class RatingBean {
         this.userId = userId;
         this.rating = rating;
     }
+
     public RatingBean(String userId) {
         this.userId = userId;
     }
+
     public RatingBean() {
     }
 
     private String userId = "";
     private Float rating = 0f;
 
-    public Map<String, Object> map (){
+    public Map<String, Object> map() {
         Map<String, Object> updates = new HashMap<>();
         updates.put("userId", userId);
         updates.put("rating", rating);
-        return  updates;
-
+        return updates;
 
     }
 }

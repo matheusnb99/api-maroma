@@ -8,6 +8,7 @@ public class ColorBean {
     public ColorBean() {
         this.id = null;
     }
+
     public ColorBean(String id, String hexVal, String name) {
         this.id = id;
         this.hexVal = hexVal;

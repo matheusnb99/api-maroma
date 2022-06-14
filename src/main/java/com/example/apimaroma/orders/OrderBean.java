@@ -22,10 +22,11 @@ public class OrderBean {
         this.id = id;
     }
 
-    public OrderBean() {}
+    public OrderBean() {
+    }
 
     public OrderBean(Double total, DocumentReference deliveryAddress,
-    Date creationDate, List<DocumentReference> products) {
+            Date creationDate, List<DocumentReference> products) {
         this.deliveryAddress = deliveryAddress;
         this.total = total;
         this.creationDate = creationDate;
@@ -33,7 +34,7 @@ public class OrderBean {
     }
 
     public OrderBean(String id, Double total, DocumentReference deliveryAddress,
-     Date creationDate, List<DocumentReference> products) {
+            Date creationDate, List<DocumentReference> products) {
         this.id = id;
         this.deliveryAddress = deliveryAddress;
         this.total = total;
