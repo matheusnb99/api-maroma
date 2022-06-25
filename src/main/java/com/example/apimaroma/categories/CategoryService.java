@@ -23,24 +23,14 @@ import com.google.firebase.cloud.FirestoreClient;
 public class CategoryService {
     private Firestore dbFirestore = FirestoreClient.getFirestore();
     private CollectionReference categoriesTable = dbFirestore.collection("categories");
+    CategoryModel categoryModel = new CategoryModel();
 
     public List<CategoryBean> getAllCategories() throws ExecutionException, InterruptedException {
-        ApiFuture<QuerySnapshot> future = categoriesTable.get();
-        // block on response
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        List<CategoryBean> categoryBeans = new ArrayList<>();
-
-        for (DocumentSnapshot document : documents) {
-            categoryBeans.add(document.toObject(CategoryBean.class));
-        }
-        return categoryBeans;
+        return (List<CategoryBean>) categoryModel.findAll();
     }
 
     public CategoryBean getCategory(String id) throws ExecutionException, InterruptedException {
-        DocumentReference documentReference = categoriesTable.document(id);
-        ApiFuture<DocumentSnapshot> future = documentReference.get();
-        DocumentSnapshot document = future.get();
-        return document.toObject(CategoryBean.class);
+        return categoryModel.findById(id).get();
     }
 
     public List<CategoryBean> searchCategoryByTitle(String query)
@@ -51,13 +41,7 @@ public class CategoryService {
                 .replace("à", "a")
                 .trim();
 
-        Query query1 = categoriesTable.orderBy("name").startAt(title).endAt(title + "\uf8ff").limit(25);
-        ApiFuture<QuerySnapshot> querySnapshot1 = query1.get();
-        List<CategoryBean> categoriesArray = new ArrayList<>();
-        for (DocumentSnapshot document : querySnapshot1.get(30, TimeUnit.SECONDS).getDocuments()) {
-            categoriesArray.add(document.toObject(CategoryBean.class));
-        }
 
-        return categoriesArray;
+        return (List<CategoryBean>) categoryModel.findByTitle(title);
     }
 }

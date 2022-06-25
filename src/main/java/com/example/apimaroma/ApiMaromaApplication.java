@@ -8,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ApiMaromaApplication {
 
-    private static Logger logger = LoggerFactory.getLogger(ApiMaromaApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApiMaromaApplication.class);
+
     public static void main(String[] args) {
         logger.info("Starting SpringBoot Server");
         SpringApplication.run(ApiMaromaApplication.class, args);
