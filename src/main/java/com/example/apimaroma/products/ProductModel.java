@@ -1,5 +1,8 @@
 package com.example.apimaroma.products;
 
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+
 import com.example.apimaroma.CrudRepository;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
@@ -7,9 +10,6 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
-
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 public class ProductModel implements CrudRepository<ProductBean, String> {
 

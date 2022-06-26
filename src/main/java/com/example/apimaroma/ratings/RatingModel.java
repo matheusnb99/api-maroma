@@ -1,7 +1,9 @@
 package com.example.apimaroma.ratings;
 
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+
 import com.example.apimaroma.CrudRepository;
-import com.example.apimaroma.orders.OrderBean;
 import com.example.apimaroma.products.ProductBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
@@ -11,17 +13,14 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
 
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-
 public class RatingModel implements CrudRepository<RatingBean, String> {
     private Firestore dbFirestore = FirestoreClient.getFirestore();
     private CollectionReference productsTable = dbFirestore.collection("products");
     private CollectionReference ratingTable;
-    public RatingModel(ProductBean product){
+
+    public RatingModel(ProductBean product) {
         this.ratingTable = productsTable.document(product.getId()).collection("ratings");
     }
-
 
     @Override
     public <S extends RatingBean> S save(S entity) {
@@ -29,14 +28,15 @@ public class RatingModel implements CrudRepository<RatingBean, String> {
     }
 
     @Override
-    public Optional<RatingBean> findById(String primaryKey){
+    public Optional<RatingBean> findById(String primaryKey) {
         return null;
     }
+
     public Optional<RatingBean> findByProduct(ProductBean product) throws ExecutionException, InterruptedException {
         DocumentReference documentReference = ratingTable.document();
         ApiFuture<DocumentSnapshot> future = documentReference.get();
         DocumentSnapshot document = future.get();
-        return Optional.ofNullable( document.toObject(RatingBean.class));
+        return Optional.ofNullable(document.toObject(RatingBean.class));
     }
 
     @Override

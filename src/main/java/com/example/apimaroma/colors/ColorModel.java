@@ -1,15 +1,21 @@
 package com.example.apimaroma.colors;
 
-import com.example.apimaroma.CrudRepository;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.*;
-import com.google.firebase.cloud.FirestoreClient;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+
+import com.example.apimaroma.CrudRepository;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.WriteResult;
+import com.google.firebase.cloud.FirestoreClient;
 
 public class ColorModel implements CrudRepository<ColorBean, String> {
 
@@ -26,7 +32,7 @@ public class ColorModel implements CrudRepository<ColorBean, String> {
         DocumentReference documentReference = colorsTable.document(primaryKey);
         ApiFuture<DocumentSnapshot> future = documentReference.get();
         DocumentSnapshot document = future.get();
-        return Optional.ofNullable( document.toObject(ColorBean.class));
+        return Optional.ofNullable(document.toObject(ColorBean.class));
     }
 
     @Override

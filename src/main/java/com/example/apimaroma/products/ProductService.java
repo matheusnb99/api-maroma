@@ -44,7 +44,6 @@ public class ProductService {
         Integer limitExists = limit.orElse(null);
         String orderByExists = orderBy.orElse(null);
         String orderExists = order.orElse(null);
-        String colorExists = color.orElse(null);
         Float minPriceExists = minPrice.orElse(null);
         Float maxPriceExists = maxPrice.orElse(null);
         Float minNoteeExists = minNote.orElse(null);
@@ -141,8 +140,6 @@ public class ProductService {
         }
 
         updates.put("grade", s / i);
-
-        ApiFuture<WriteResult> future2 = productsTable.document(id).update(updates);
 
         return future.get().getUpdateTime();
 

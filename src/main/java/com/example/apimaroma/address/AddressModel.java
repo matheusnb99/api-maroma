@@ -1,17 +1,23 @@
 package com.example.apimaroma.address;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+
 import com.example.apimaroma.CrudRepository;
-import com.example.apimaroma.categories.CategoryBean;
-import com.example.apimaroma.orders.OrderBean;
-import com.example.apimaroma.products.ProductBean;
 import com.example.apimaroma.user.UserBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.SetOptions;
+import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
-
-import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 public class AddressModel implements CrudRepository<AddressBean, String> {
 
@@ -19,19 +25,19 @@ public class AddressModel implements CrudRepository<AddressBean, String> {
     private CollectionReference addressesTable;
     private CollectionReference usersTable = dbFirestore.collection("users");
 
-    public AddressModel(UserBean user){
+    public AddressModel(UserBean user) {
         this.addressesTable = usersTable.document(user.getId()).collection("addresses");
     }
 
-
     @Override
     public <S extends AddressBean> S save(S entity) throws ExecutionException, InterruptedException {
-        if(entity.getId().isEmpty() || !this.existsById(entity.getId())){
+        if (entity.getId().isEmpty() || !this.existsById(entity.getId())) {
             ApiFuture<DocumentReference> addedDocRef = addressesTable.add(entity);
             System.out.println("Added document with ID: " + addedDocRef.get().getId());
 
             entity.setId(addedDocRef.get().getId());
-            ApiFuture<WriteResult> writeResult = addressesTable.document(addedDocRef.get().getId()).set(entity, SetOptions.merge());
+            ApiFuture<WriteResult> writeResult = addressesTable.document(addedDocRef.get().getId()).set(entity,
+                    SetOptions.merge());
             System.out.println("Update time : " + writeResult.get().getUpdateTime());
 
             return (S) addedDocRef.get().get().get().toObject(AddressBean.class);
@@ -41,16 +47,15 @@ public class AddressModel implements CrudRepository<AddressBean, String> {
 
         return (S) entity;
 
-
     }
 
     @Override
-    public Optional<AddressBean> findById(String primaryKey)  throws ExecutionException, InterruptedException {
+    public Optional<AddressBean> findById(String primaryKey) throws ExecutionException, InterruptedException {
         DocumentReference documentReference = addressesTable.document(primaryKey);
         ApiFuture<DocumentSnapshot> future = documentReference.get();
         DocumentSnapshot document = future.get();
 
-        return Optional.ofNullable( document.toObject(AddressBean.class));
+        return Optional.ofNullable(document.toObject(AddressBean.class));
     }
 
     @Override

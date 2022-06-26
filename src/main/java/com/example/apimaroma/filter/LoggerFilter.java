@@ -1,19 +1,19 @@
 package com.example.apimaroma.filter;
 
-import com.example.apimaroma.ApiMaromaApplication;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 @Component
 public class LoggerFilter extends OncePerRequestFilter {
@@ -36,7 +36,8 @@ public class LoggerFilter extends OncePerRequestFilter {
 
         LOGGER.debug(
                 "FINISHED PROCESSING : METHOD={}; REQUESTURI={}; REQUESTURI={}; REQUEST PAYLOAD={}; RESPONSE CODE={}; RESPONSE={}; TIME TAKEN={}ms",
-                request.getMethod(), request.getRequestURI(), request.getQueryString(), requestBody, response.getStatus(), responseBody,
+                request.getMethod(), request.getRequestURI(), request.getQueryString(), requestBody,
+                response.getStatus(), responseBody,
                 timeTaken);
         responseWrapper.copyBodyToResponse();
     }

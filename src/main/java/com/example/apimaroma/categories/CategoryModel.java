@@ -1,12 +1,5 @@
 package com.example.apimaroma.categories;
 
-import com.example.apimaroma.CrudRepository;
-import com.example.apimaroma.address.AddressBean;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.*;
-import com.google.firebase.cloud.FirestoreClient;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,18 +7,33 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import com.example.apimaroma.CrudRepository;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.SetOptions;
+import com.google.cloud.firestore.WriteResult;
+import com.google.firebase.cloud.FirestoreClient;
+
 public class CategoryModel implements CrudRepository<CategoryBean, String> {
     private Firestore dbFirestore = FirestoreClient.getFirestore();
     private CollectionReference categoriesTable = dbFirestore.collection("categories");
 
     @Override
     public <S extends CategoryBean> S save(S entity) throws ExecutionException, InterruptedException {
-        if(entity.getId().isEmpty() || !this.existsById(entity.getId())){
+        if (entity.getId().isEmpty() || !this.existsById(entity.getId())) {
             ApiFuture<DocumentReference> addedDocRef = categoriesTable.add(entity);
             System.out.println("Added document with ID: " + addedDocRef.get().getId());
 
             entity.setId(addedDocRef.get().getId());
-            ApiFuture<WriteResult> writeResult = categoriesTable.document(addedDocRef.get().getId()).set(entity, SetOptions.merge());
+            ApiFuture<WriteResult> writeResult = categoriesTable.document(addedDocRef.get().getId()).set(entity,
+                    SetOptions.merge());
             System.out.println("Update time : " + writeResult.get().getUpdateTime());
 
             return (S) addedDocRef.get().get().get().toObject(CategoryBean.class);
@@ -42,12 +50,12 @@ public class CategoryModel implements CrudRepository<CategoryBean, String> {
         DocumentReference documentReference = categoriesTable.document(primaryKey);
         ApiFuture<DocumentSnapshot> future = documentReference.get();
         DocumentSnapshot document = future.get();
-        Optional<CategoryBean> opt = Optional.ofNullable( document.toObject(CategoryBean.class));
+        Optional<CategoryBean> opt = Optional.ofNullable(document.toObject(CategoryBean.class));
         return opt;
     }
 
-
-    public Iterable<CategoryBean> findByTitle(String title) throws ExecutionException, InterruptedException, TimeoutException {
+    public Iterable<CategoryBean> findByTitle(String title)
+            throws ExecutionException, InterruptedException, TimeoutException {
         Query query1 = categoriesTable.orderBy("name").startAt(title).endAt(title + "\uf8ff").limit(25);
         ApiFuture<QuerySnapshot> querySnapshot1 = query1.get();
         List<CategoryBean> categoriesArray = new ArrayList<>();

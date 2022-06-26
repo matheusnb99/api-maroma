@@ -1,6 +1,5 @@
 package com.example.apimaroma.orders;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -13,7 +12,6 @@ import com.google.cloud.Timestamp;
 public class OrderService {
 
     OrderModel orderModel = new OrderModel();
-
 
     public List<OrderBean> getAllOrders(UserBean user) throws ExecutionException, InterruptedException {
         return (List<OrderBean>) orderModel.findAllByUser(user);
