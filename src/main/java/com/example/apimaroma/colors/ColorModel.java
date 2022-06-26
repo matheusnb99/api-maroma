@@ -6,15 +6,10 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import com.example.apimaroma.CrudRepository;
+import com.example.apimaroma.categories.CategoryBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 
 public class ColorModel implements CrudRepository<ColorBean, String> {
@@ -23,8 +18,23 @@ public class ColorModel implements CrudRepository<ColorBean, String> {
     private CollectionReference colorsTable = dbFirestore.collection("colors");
 
     @Override
-    public <S extends ColorBean> S save(S entity) {
-        return null;
+    public <S extends ColorBean> S save(S entity) throws ExecutionException, InterruptedException {
+
+        if (entity.getId()==null || ((entity.getId().isEmpty() || !this.existsById(entity.getId())))) {
+            ApiFuture<DocumentReference> addedDocRef = colorsTable.add(entity);
+            System.out.println("Added document with ID: " + addedDocRef.get().getId());
+
+            entity.setId(addedDocRef.get().getId());
+            ApiFuture<WriteResult> writeResult = colorsTable.document(addedDocRef.get().getId()).set(entity,
+                    SetOptions.merge());
+            System.out.println("Update time : " + writeResult.get().getUpdateTime());
+
+            return (S) addedDocRef.get().get().get().toObject(ColorBean.class);
+        }
+
+        colorsTable.document(entity.getId()).set(entity);
+
+        return (S) entity;
     }
 
     @Override
@@ -64,6 +74,6 @@ public class ColorModel implements CrudRepository<ColorBean, String> {
 
     @Override
     public boolean existsById(String primaryKey) {
-        return false;
+        return true;
     }
 }

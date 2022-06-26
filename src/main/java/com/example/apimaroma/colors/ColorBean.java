@@ -14,6 +14,10 @@ public class ColorBean {
         this.hexVal = hexVal;
         this.name = name;
     }
+    public ColorBean(String hexVal, String name) {
+        this.hexVal = hexVal;
+        this.name = name;
+    }
 
     public ColorBean(String id) {
         this.id = id;
