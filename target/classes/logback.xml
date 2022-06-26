@@ -1,0 +1,40 @@
+<configuration scan="true" scanPeriod="5000">
+
+    <!-- <property name="contextName" value="cfec-app-utils-infogreffe-stats" /> -->
+    <!-- <contextName>${artifactId}</contextName> -->
+    <property name="CONTEXT_NAME" value="TP-desc-jeux" />
+    <property name="contextName" value="${CONTEXT_NAME}" />
+
+    <appender name="fichier" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${CONTEXT_NAME}.log</file>
+
+        <append>true</append>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${CONTEXT_NAME}.%d{yyyyMMdd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>20</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%date{yyyy'-'MM'-'dd' 'HH':'mm':'ss'.'SSS' 'XX} %contextName [%thread] %-5level %logger{0}.%method:%line - %msg%n%ex{full}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{yyyy'-'MM'-'dd' 'HH':'mm':'ss'.'SSS' 'XX} %contextName [%thread] %-5level %logger{0}.%method:%line - %msg%n%ex{full}</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.example.apimaroma" level="DEBUG"  additivity="false">
+        <appender-ref ref="fichier" />
+        <appender-ref ref="console" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="console" />
+        <appender-ref ref="fichier" />
+    </root>
+</configuration>
