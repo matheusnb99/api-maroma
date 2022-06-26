@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import com.example.apimaroma.address.AddressBean;
+import com.example.apimaroma.address.AddressModel;
 import com.example.apimaroma.address.AddressService;
 import com.example.apimaroma.products.ProductBean;
 import com.example.apimaroma.products.ProductService;
@@ -64,8 +65,7 @@ public class UserBean {
     public AddressBean getDefaultAddress() {
         if (defaultAddress != null) {
             try {
-                AddressBean addr = (new AddressService()).getAddress(defaultAddress);
-                return addr;
+                return (new AddressModel(this)).findByReference(defaultAddress);
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
                 return null;

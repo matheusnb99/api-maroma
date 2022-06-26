@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import com.example.apimaroma.address.AddressBean;
+import com.example.apimaroma.address.AddressModel;
 import com.example.apimaroma.address.AddressService;
 import com.example.apimaroma.products.ProductBean;
 import com.example.apimaroma.products.ProductService;
@@ -69,7 +70,7 @@ public class OrderBean {
     public AddressBean getDeliveryAddress() {
         AddressBean addr = null;
         try {
-            addr = (new AddressService()).getAddress(deliveryAddress);
+            addr = (new AddressModel()).findByReference(deliveryAddress);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
