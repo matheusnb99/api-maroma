@@ -1,5 +1,7 @@
 package com.example.apimaroma.address;
 
+import com.example.apimaroma.colors.ColorBean;
+import com.example.apimaroma.user.UserBean;
 import com.example.apimaroma.utils.wrappers.AddressWrapper;
 import com.google.cloud.Timestamp;
 import io.swagger.annotations.Api;
@@ -9,6 +11,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -35,8 +38,19 @@ public class AddressController {
 
 
     @DeleteMapping("/address")
-    public Timestamp removeItemFromBasket(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
-        return addressService.removeAddress((String) bodyMap.get("userId"), new AddressBean((String) bodyMap.get("addressId")));
+    public Timestamp removeAddress(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
+        return addressService.removeAddress((String) bodyMap.get("userId"),     new AddressBean((String) bodyMap.get("addressId")));
+    }
+
+
+    @GetMapping("/{userId}/address/{addressId}")
+    public AddressBean getAddress(@PathVariable("userId") String userId, @PathVariable("addressId") String addressId) throws ExecutionException, InterruptedException {
+        return addressService.getAddress(userId, new AddressBean(addressId));
+    }
+
+    @GetMapping("/{userId}/addresses")
+    public List<AddressBean> getAddresses(@PathVariable("userId") String userId) throws ExecutionException, InterruptedException {
+        return addressService.getAddresses(userId);
     }
 
 

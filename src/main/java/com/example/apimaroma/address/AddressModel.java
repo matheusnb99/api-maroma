@@ -2,6 +2,7 @@ package com.example.apimaroma.address;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -27,6 +28,9 @@ public class AddressModel implements CrudRepository<AddressBean, String> {
 
     public AddressModel(UserBean user) {
         this.addressesTable = usersTable.document(user.getId()).collection("addresses");
+    }
+
+    public AddressModel() {
     }
 
     @Override
@@ -86,5 +90,12 @@ public class AddressModel implements CrudRepository<AddressBean, String> {
     @Override
     public boolean existsById(String primaryKey) {
         return false;
+    }
+
+
+    public AddressBean findByReference(DocumentReference addressRef) throws ExecutionException, InterruptedException {
+        ApiFuture<DocumentSnapshot> future = addressRef.get();
+        DocumentSnapshot document = future.get();
+        return document.toObject(AddressBean.class);
     }
 }
