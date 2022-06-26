@@ -2,7 +2,7 @@
 
     <!-- <property name="contextName" value="cfec-app-utils-infogreffe-stats" /> -->
     <!-- <contextName>${artifactId}</contextName> -->
-    <property name="CONTEXT_NAME" value="TP-desc-jeux" />
+    <property name="CONTEXT_NAME" value="log" />
     <property name="contextName" value="${CONTEXT_NAME}" />
 
     <appender name="fichier" class="ch.qos.logback.core.rolling.RollingFileAppender">

@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutionException;
 
 public interface CrudRepository<T, ID> {
 
-    <S extends T> S save(S entity);
+    <S extends T> S save(S entity) throws ExecutionException, InterruptedException;
 
     Optional<T> findById(ID primaryKey) throws ExecutionException, InterruptedException;
 

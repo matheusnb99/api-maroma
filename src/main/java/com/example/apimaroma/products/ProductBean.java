@@ -42,6 +42,9 @@ public class ProductBean {
 
     public ProductBean() {
     }
+    public ProductBean(String id) {
+        this.id=id;
+    }
 
     public ProductBean(String name, String description, List<DocumentReference> categories, Integer stock, Double price,
             List<String> images,

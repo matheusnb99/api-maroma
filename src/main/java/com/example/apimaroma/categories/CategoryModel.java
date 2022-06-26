@@ -1,6 +1,7 @@
 package com.example.apimaroma.categories;
 
 import com.example.apimaroma.CrudRepository;
+import com.example.apimaroma.address.AddressBean;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
@@ -18,8 +19,22 @@ public class CategoryModel implements CrudRepository<CategoryBean, String> {
     private CollectionReference categoriesTable = dbFirestore.collection("categories");
 
     @Override
-    public <S extends CategoryBean> S save(S entity) {
-        return null;
+    public <S extends CategoryBean> S save(S entity) throws ExecutionException, InterruptedException {
+        if(entity.getId().isEmpty() || !this.existsById(entity.getId())){
+            ApiFuture<DocumentReference> addedDocRef = categoriesTable.add(entity);
+            System.out.println("Added document with ID: " + addedDocRef.get().getId());
+
+            entity.setId(addedDocRef.get().getId());
+            ApiFuture<WriteResult> writeResult = categoriesTable.document(addedDocRef.get().getId()).set(entity, SetOptions.merge());
+            System.out.println("Update time : " + writeResult.get().getUpdateTime());
+
+            return (S) addedDocRef.get().get().get().toObject(CategoryBean.class);
+        }
+
+        categoriesTable.document(entity.getId()).set(entity);
+
+        return (S) entity;
+
     }
 
     @Override
@@ -62,9 +77,10 @@ public class CategoryModel implements CrudRepository<CategoryBean, String> {
     }
 
     @Override
-    public Timestamp delete(CategoryBean entity) {
+    public Timestamp delete(CategoryBean entity) throws ExecutionException, InterruptedException {
+        ApiFuture<WriteResult> writeResult = categoriesTable.document(entity.getId()).delete();
+        return writeResult.get().getUpdateTime();
 
-        return null;
     }
 
     @Override

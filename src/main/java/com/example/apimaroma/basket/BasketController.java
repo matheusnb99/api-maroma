@@ -1,6 +1,9 @@
 package com.example.apimaroma.basket;
 
+import com.example.apimaroma.ApiMaromaApplication;
 import com.example.apimaroma.user.UserBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,15 +31,15 @@ public class BasketController {
 
 
     @PostMapping("/removeBasket")
-    public UserBean removeFromBasket(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
+    public UserBean removeItemFromBasket(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
         return basketService.removeItemFromBasket((String) bodyMap.get("userId"), (String) bodyMap.get("productId"), (Integer) bodyMap.get("quantity"));
     }
     @DeleteMapping("/removeBasket")
-    public UserBean deleteFromBasket(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
+    public UserBean deleteItemFromBasket_(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
         return basketService.removeItemFromBasket((String) bodyMap.get("userId"), (String) bodyMap.get("productId"), (Integer) bodyMap.get("quantity"));
     }
     @DeleteMapping("/clearBasket")
-    public UserBean removeFromBasket(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
+    public UserBean clearBasket(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
         return basketService.clearBasket((String) bodyMap.get("userId"));
     }
 

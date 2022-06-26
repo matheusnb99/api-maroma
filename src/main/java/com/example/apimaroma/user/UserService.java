@@ -70,9 +70,6 @@ public class UserService {
 
         return gson.fromJson(json, UserBean.class);
     }
-
-<<<<<<< HEAD
-=======
     public UserBean addItemToBasket(String userId, String productId, Integer quantity)
             throws ExecutionException, InterruptedException {
         DocumentReference userRef = usersTable.document(userId);
@@ -131,5 +128,4 @@ public class UserService {
 
         return user;
     }
->>>>>>> 77b22d2646c283d2656508fff09b6338592a8cf3
 }

@@ -51,9 +51,9 @@ public class ColorModel implements CrudRepository<ColorBean, String> {
     }
 
     @Override
-    public Timestamp delete(ColorBean entity) {
-
-        return null;
+    public Timestamp delete(ColorBean entity) throws ExecutionException, InterruptedException {
+        ApiFuture<WriteResult> writeResult = colorsTable.document(entity.getId()).delete();
+        return writeResult.get().getUpdateTime();
     }
 
     @Override
