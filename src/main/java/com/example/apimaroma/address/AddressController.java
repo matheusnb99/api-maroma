@@ -27,7 +27,7 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    @ApiOperation("Returns the address of this ID")
+    @ApiOperation("Adds an address to a user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful request")
     })
@@ -36,18 +36,28 @@ public class AddressController {
         return addressService.addAddress((String) addressWrapper.getUser().getId(), addressWrapper.getAddresses().get(0));
     }
 
-
+    @ApiOperation("Delete a specific address of an user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful request")
+    })
     @DeleteMapping("/address")
     public Timestamp removeAddress(@RequestBody Map<String, Object> bodyMap) throws ExecutionException, InterruptedException {
         return addressService.removeAddress((String) bodyMap.get("userId"),     new AddressBean((String) bodyMap.get("addressId")));
     }
 
-
+    @ApiOperation("Returns a specific address of an user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful request")
+    })
     @GetMapping("/{userId}/address/{addressId}")
     public AddressBean getAddress(@PathVariable("userId") String userId, @PathVariable("addressId") String addressId) throws ExecutionException, InterruptedException {
         return addressService.getAddress(userId, new AddressBean(addressId));
     }
 
+    @ApiOperation("Returns all addresses of an user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful request")
+    })
     @GetMapping("/{userId}/addresses")
     public List<AddressBean> getAddresses(@PathVariable("userId") String userId) throws ExecutionException, InterruptedException {
         return addressService.getAddresses(userId);
