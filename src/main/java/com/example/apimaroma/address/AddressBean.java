@@ -1,13 +1,30 @@
 package com.example.apimaroma.address;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AddressBean {
+
+    @JsonProperty("id")
     private String id = "";
+
+    @JsonProperty("address")
     private String address = "";
+
+    @JsonProperty("city")
     private String city = "";
+
+    @JsonProperty("country")
     private String country = "";
+
+    @JsonProperty("postalCode")
     private Integer postalCode = 0;
+
+    @JsonProperty("recipient")
     private String recipient = "";
 
+    public AddressBean(String addressId) {
+        this.id = addressId;
+    }
     public AddressBean() {
     }
 
