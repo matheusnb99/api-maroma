@@ -1,16 +1,17 @@
 package com.example.apimaroma.categories;
 
+import java.sql.Time;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import com.example.apimaroma.address.AddressBean;
+import com.example.apimaroma.utils.wrappers.AddressWrapper;
+import com.google.cloud.Timestamp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +34,7 @@ public class CategoryController {
             @ApiResponse(code = 200, message = "Successful request")
     })
     @GetMapping("/{id}")
-    public CategoryBean getCategorie(@PathVariable("id") String id) throws ExecutionException, InterruptedException {
+    public CategoryBean getCategory(@PathVariable("id") String id) throws ExecutionException, InterruptedException {
         return categoryService.getCategory(id);
     }
 
@@ -47,6 +48,25 @@ public class CategoryController {
         }
 
         return categoryService.getAllCategories();
+    }
+
+
+    @ApiOperation("Adds a category")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful request")
+    })
+    @PostMapping
+    public CategoryBean addCategory(@RequestBody CategoryBean category) throws ExecutionException, InterruptedException {
+        return categoryService.addCategory(category);
+    }
+
+    @ApiOperation("Delete a specific category")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful request")
+    })
+    @DeleteMapping("/address")
+    public Timestamp removeCategory(@RequestBody CategoryBean category) throws ExecutionException, InterruptedException {
+        return categoryService.removeCategory(category);
     }
 
 }

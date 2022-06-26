@@ -27,6 +27,8 @@ public class CategoryModel implements CrudRepository<CategoryBean, String> {
 
     @Override
     public <S extends CategoryBean> S save(S entity) throws ExecutionException, InterruptedException {
+        System.out.println("++++++++++++++++++++++++"+entity.getId().isEmpty());
+
         if (entity.getId().isEmpty() || !this.existsById(entity.getId())) {
             ApiFuture<DocumentReference> addedDocRef = categoriesTable.add(entity);
             System.out.println("Added document with ID: " + addedDocRef.get().getId());
@@ -93,6 +95,6 @@ public class CategoryModel implements CrudRepository<CategoryBean, String> {
 
     @Override
     public boolean existsById(String primaryKey) {
-        return false;
+        return true;
     }
 }

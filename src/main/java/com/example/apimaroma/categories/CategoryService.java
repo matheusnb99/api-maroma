@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import com.google.cloud.Timestamp;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,5 +29,13 @@ public class CategoryService {
                 .trim();
 
         return (List<CategoryBean>) categoryModel.findByTitle(title);
+    }
+
+    public Timestamp removeCategory(CategoryBean category) throws ExecutionException, InterruptedException {
+        return categoryModel.delete(category);
+    }
+
+    public CategoryBean addCategory(CategoryBean category) throws ExecutionException, InterruptedException {
+        return categoryModel.save(category);
     }
 }
