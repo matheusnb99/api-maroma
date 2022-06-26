@@ -2,6 +2,7 @@ package com.example.apimaroma.filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -30,9 +31,9 @@ public class LoggerFilter extends OncePerRequestFilter {
         long timeTaken = System.currentTimeMillis() - startTime;
 
         String requestBody = getStringValue(requestWrapper.getContentAsByteArray(),
-                request.getCharacterEncoding());
+                String.valueOf(StandardCharsets.UTF_8));
         String responseBody = getStringValue(responseWrapper.getContentAsByteArray(),
-                response.getCharacterEncoding());
+                String.valueOf(StandardCharsets.UTF_8));
 
         LOGGER.debug(
                 "FINISHED PROCESSING : METHOD={}; REQUESTURI={}; REQUESTURI={}; REQUEST PAYLOAD={}; RESPONSE CODE={}; RESPONSE={}; TIME TAKEN={}ms",
