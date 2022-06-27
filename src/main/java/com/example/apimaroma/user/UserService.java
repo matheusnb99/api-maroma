@@ -24,51 +24,18 @@ import com.google.gson.Gson;
 public class UserService {
     private Firestore dbFirestore = FirestoreClient.getFirestore();
     private CollectionReference usersTable = dbFirestore.collection("users");
+    private UserModel userModel = new UserModel();
 
     public UserBean getUser(String userId) throws ExecutionException, InterruptedException{
-        DocumentReference documentReference = usersTable.document(userId);
-        ApiFuture<DocumentSnapshot> future = documentReference.get();
-        DocumentSnapshot document = future.get();
-        UserBean user = document.toObject(UserBean.class);
-        return user;
+        return userModel.findById(userId).get();
     }
 
     public List<UserBean> searchUserByName(String name) throws ExecutionException, InterruptedException {
-        // Query query = usersTable.orderBy("name").startAt(name).endAt(name+'\uf8ff');
-        Query query1 = usersTable.whereEqualTo("firstName", name);
-        Query query2 = usersTable.whereEqualTo("lastName", name);
-        ApiFuture<QuerySnapshot> querySnapshot1 = query1.get();
-        ApiFuture<QuerySnapshot> querySnapshot2 = query2.get();
-
-        List<UserBean> usersArray = new ArrayList<>();
-        for (DocumentSnapshot document : querySnapshot1.get().getDocuments()) {
-            usersArray.add(document.toObject(UserBean.class));
-        }
-        for (DocumentSnapshot document : querySnapshot2.get().getDocuments()) {
-            UserBean tempUser = document.toObject(UserBean.class);
-            if (!usersArray.contains(tempUser)) {
-                usersArray.add(tempUser);
-            }
-        }
-        return usersArray;
+        return (List<UserBean>) userModel.findByName(name);
     }
 
     public UserBean createUser(HashMap<String, Object> userMap) throws ExecutionException, InterruptedException {
-        System.out.println(userMap.values());
-        DocumentReference userRef = usersTable.document((String) userMap.get("id"));
-
-        userMap.put("birthDate", new Date((Long) userMap.get("birthDateLong")));
-        userMap.put("basket", new ArrayList<>());
-        userMap.put("defaultAddress", null);
-
-        userMap.remove("birthDateLong");
-
-        userRef.set(userMap);
-
-        Gson gson = new Gson();
-        String json = gson.toJson(userMap);
-
-        return gson.fromJson(json, UserBean.class);
+        return userModel.saveUser(userMap);
     }
     public UserBean addItemToBasket(String userId, String productId, Integer quantity)
             throws ExecutionException, InterruptedException {
