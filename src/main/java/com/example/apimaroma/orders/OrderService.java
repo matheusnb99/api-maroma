@@ -3,6 +3,8 @@ package com.example.apimaroma.orders;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.example.apimaroma.address.AddressBean;
+import com.stripe.model.Order;
 import org.springframework.stereotype.Service;
 
 import com.example.apimaroma.user.UserBean;
@@ -17,12 +19,19 @@ public class OrderService {
         return (List<OrderBean>) orderModel.findAllByUser(user);
     }
 
-    public OrderBean getOrdersById(String id) throws ExecutionException, InterruptedException {
+    public OrderBean getOrderById(String id) throws ExecutionException, InterruptedException {
         return orderModel.findById(id).get();
     }
 
     public Timestamp deleteOrderById(String id) throws ExecutionException, InterruptedException {
         return orderModel.delete(new OrderBean(id));
     }
+
+    public OrderBean addOrder(OrderBean order) throws ExecutionException, InterruptedException{
+        return orderModel.save(order);
+    }
+
+
+
 
 }

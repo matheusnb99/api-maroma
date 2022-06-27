@@ -25,7 +25,7 @@ public class SwaggerConfig {
     }
 
     private Predicate<String> postPaths() {
-        return or(regex("/api/v1.*"));
+        return or(regex("/api/.*"));
     }
 
     private ApiInfo apiInfo() {

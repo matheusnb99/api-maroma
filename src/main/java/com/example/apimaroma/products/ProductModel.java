@@ -3,6 +3,7 @@ package com.example.apimaroma.products;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import com.example.apimaroma.CrudRepository;
 import com.example.apimaroma.address.AddressBean;
@@ -64,7 +65,7 @@ public class ProductModel implements CrudRepository<ProductBean, String> {
 
         return productsArray;
     }
-    public Iterable<ProductBean> findByTitle(String title) throws ExecutionException, InterruptedException {
+    public Iterable<ProductBean> findByTitle(String title) throws ExecutionException, InterruptedException, TimeoutException {
         Query query1 = productsTable.orderBy("name").startAt(title).endAt(title + "\uf8ff").limit(25);
         ApiFuture<QuerySnapshot> querySnapshot1 = query1.get();
         List<ProductBean> productsArray = new ArrayList<>();
@@ -74,7 +75,7 @@ public class ProductModel implements CrudRepository<ProductBean, String> {
 
         return productsArray;
     }
-    public Iterable<ProductBean> findByCategory(String categoryId) throws ExecutionException, InterruptedException {
+    public Iterable<ProductBean> findByCategory(String categoryId) throws ExecutionException, InterruptedException, TimeoutException {
         Query query1 = productsTable.whereArrayContains("categories",
                 dbFirestore.collection("categories").document(categoryId));
         ApiFuture<QuerySnapshot> querySnapshot1 = query1.get();

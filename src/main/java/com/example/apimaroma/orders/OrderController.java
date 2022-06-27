@@ -35,7 +35,7 @@ public class OrderController {
 
     @GetMapping("/getOrderById")
     public OrderBean getOrderById(@PathVariable("id") String id) throws ExecutionException, InterruptedException {
-        return orderService.getOrdersById(id);
+        return orderService.getOrderById(id);
     }
 
     @PostMapping("deleteOrderById")
