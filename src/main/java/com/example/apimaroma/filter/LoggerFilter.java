@@ -40,6 +40,7 @@ public class LoggerFilter extends OncePerRequestFilter {
                 request.getMethod(), request.getRequestURI(), request.getQueryString(), requestBody,
                 response.getStatus(), responseBody,
                 timeTaken);
+
         responseWrapper.copyBodyToResponse();
     }
 
