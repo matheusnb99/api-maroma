@@ -22,7 +22,8 @@ public class ImageController {
     @GetMapping(path="{id}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getImage(@PathVariable String id, @RequestParam("imageNumber") Optional<Integer> imageNumber) throws Exception {
         ProductBean product = productModel.findById(id).orElseThrow(() -> new Exception("Produit pas trouvé"));
-        String image = product.getImages().get(imageNumber.get());
+        int i = imageNumber.isPresent()? imageNumber.get() : 0;
+        String image = product.getImages().get(i);
 
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(image);
