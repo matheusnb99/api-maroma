@@ -20,7 +20,9 @@ import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.*;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
@@ -34,21 +36,25 @@ import com.google.firebase.FirebaseOptions;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class FirebaseInitialize {
+public class FirebaseInitialize implements EnvironmentAware {
     @Value("${app.firebase-configuration-file}")
     private String firebaseConfigPath;
 
 
     private final org.slf4j.Logger log = LoggerFactory.getLogger(FirebaseInitialize.class);
-    private final Environment environment;
+    @Autowired
+    private Environment environment;
+
+    @Override
+    public void setEnvironment(Environment env) {
+        this.environment = env;
+    }
 
     private StorageOptions storageOptions;
     private String bucketName;
     private String projectId;
 
-    public FirebaseInitialize(Environment environment) {
-        this.environment = environment;
-    }
+
 
 
     @PostConstruct
@@ -56,7 +62,6 @@ public class FirebaseInitialize {
 
         InputStream serviceAccount = null;
 
-        bucketName = environment.getRequiredProperty("FIREBASE_BUCKET_NAME");
         projectId = environment.getRequiredProperty("FIREBASE_PROJECT_ID");
 
         try {
