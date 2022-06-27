@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -19,9 +20,9 @@ public class ImageController {
     ProductModel productModel = new ProductModel();
 
     @GetMapping(path="{id}", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] getImage(@PathVariable String id) throws Exception {
+    public byte[] getImage(@PathVariable String id, @RequestParam("imageNumber") Optional<Integer> imageNumber) throws Exception {
         ProductBean product = productModel.findById(id).orElseThrow(() -> new Exception("Produit pas trouvé"));
-        String image = product.getImages().get(0);
+        String image = product.getImages().get(imageNumber.get());
 
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(image);
